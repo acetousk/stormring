@@ -2,7 +2,7 @@ extends Node
 ## Net test robot. tools/net_test.py starts two copies of the game with:
 ##   --net-test=host --code=1234     or     --net-test=join --code=1234
 ## 1. The host makes the room and starts the match when the joiner is in.
-## 2. The joiner does things by itself: opens a chest, builds a wall, shoots a bot.
+## 2. The joiner does things by itself: opens a lunch box, builds a tray wall, splats a bot.
 ## 3. At 10, 30 and 60 s (storm clock, same on both) each copy prints what it sees.
 ## Every line that starts with "NETTEST:" is read by net_test.py.
 
@@ -10,8 +10,8 @@ const SNAP_TIMES := [10.0, 30.0, 60.0]
 ## Joiner actions: seconds after the joiner's match started.
 const CHEST_AT := 12.0
 const WALL_AT := 14.0
-const SHOOT_AT := 16.0
-const WALL_SPOT := Vector3(10, 2.2, 10)
+const SPLAT_AT := 16.0
+const WALL_SPOT := Vector3(21, 2.2, 0)
 
 var role := ""
 var code := ""
@@ -84,7 +84,7 @@ func _get_into_match(delta: float) -> void:
 			Net.join_room(code)
 
 
-## Step 2: the joiner opens a chest, builds a wall, and shoots a bot.
+## Step 2: the joiner opens a lunch box, builds a tray wall, and splats a bot.
 func _joiner_actions() -> void:
 	var tree := get_tree()
 	var me: Node = tree.get_first_node_in_group("player")
@@ -102,14 +102,16 @@ func _joiner_actions() -> void:
 		actions_done = 2
 		say("action wall at %s" % WALL_SPOT)
 		Net.tell_host(me._ask_wall, Transform3D(Basis(), WALL_SPOT))
-	elif actions_done == 2 and match_clock >= SHOOT_AT:
+	elif actions_done == 2 and match_clock >= SPLAT_AT:
 		actions_done = 3
 		var bots := tree.get_nodes_in_group("bot")
 		if bots.is_empty():
-			say("action shoot: no bots left")
+			say("action splat: no bots left")
 		else:
-			say("action shoot %s" % bots[0].get_path())
-			bots[0].hurt(Tune.rifle_damage, me)
+			say("action splat %s" % bots[0].get_path())
+			# A real throw (every screen should show it), then a sure splat (a moving bot may dodge).
+			tree.current_scene.throw_food(me.global_position + Vector3(0, 1.4, 0), Tune.throw_speed, bots[0].global_position + Vector3(0, 1, 0), me)
+			bots[0].hurt(Tune.tomato_splat, me)
 
 
 ## Step 3: when the storm clock passes 10, 30, 60 s, print everything we see.

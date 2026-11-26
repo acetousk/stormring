@@ -13,6 +13,7 @@ No `DESIGN.md`? Do the first run in `AGENTS.md`. It uses the `doctor` skill.
 ## 1. The idea
 - A copy of a real game ("a … clone")? Say **Not possible here**: we can't copy its name, characters, art, map, or music. Name the parts of the genre we can make. Offer an original game with those parts.
 - Too big (open world, MMO, 100 players)? Offer a small version that fits the budget.
+- Not kid-friendly (realistic guns, blood, gore)? Say why in one line, and offer a friendly version with the same fun (see `feature` section 1, step 5).
 
 ## 2. Card G1: design + scope (5 min)
 Ask **one question at a time**. Wait for each answer.

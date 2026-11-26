@@ -39,7 +39,7 @@ Show this map as part of the plan, before the quiz. The kid approves the map bef
 
 **Both**
 - Spawn points as `Marker2D` / `Marker3D` in a group `spawns`. The host picks them.
-- Play-area limits: walls, water, or a kill floor. The player can never fall out of the world.
+- Play-area limits: walls, water, or a "fall out" floor that sends you back to the start. The player can never fall out of the world.
 - Size numbers (width, number of enemies, chest count) go in `Tune`.
 
 ## 4. Speed

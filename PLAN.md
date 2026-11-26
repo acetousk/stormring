@@ -1,7 +1,7 @@
 # PLAN
 
 ## This week
-G2 core loop: island, player, movement, camera, glide start.
+LR lunchroom: the food fight moves to a giant 80s school lunchroom, and everyone is a small kindergartner (v0.3.0).
 
 ## Cards
 | ✓ | ID | Input | Output | Done when |
@@ -21,6 +21,23 @@ G2 core loop: island, player, movement, camera, glide start.
 |  | G7 Ship | G6, kid's fix | `project.godot`, `icon.svg`, `scenes/bot.tscn`, `DESIGN.md`, `CHANGELOG.md`, `README.md`, `PLAN.md`, tag `v0.2.0` | `v0.2.0` builds on GitHub; Solo runs smoothly on the web and the kid's phone |
 | ✓ | F1 Hide online status in solo | Kid's bug report (v0.2.0) | `scripts/hud.gd`, `CHANGELOG.md`, `PLAN.md` | Solo shows no status line; online matches and the start screen still do |
 | ✓ | F2 No key errors in local mode | Kid's bug report, `RequestProcessor.gd:273` | `scripts/health.gd`, `scripts/storm.gd`, `CHANGELOG.md`, `PLAN.md` | 2-window Output has no "Key must not be empty"; net test all ✅ (kid tested 2 windows: clean and working; net test could not run: joiner never found the room, likely the test terminal blocks local broadcasts, not proven; kid chose to ship v0.2.2 on the 2-window test) |
+| ✓ | FF1 Food fight design | Kid: "no guns, a kid-friendly food fight" | `DESIGN.md`, `PLAN.md` | Kid says the design and the word list match |
+| ✓ | FF2 Tomatoes + clean | FF1 | `scripts/food.gd`, `scenes/food.tscn`, `scripts/splat.gd`, `scenes/splat.tscn`, `scripts/player.gd`, `scripts/bot.gd`, `scripts/game.gd`, `scripts/health.gd`, `scenes/main.tscn`, `scripts/tune.gd`, `tools/net_test.gd` | A tomato flies in an arc and splats; splatted bots and players lose clean; net test all ✅ |
+| ✓ | FF3 Spoon + toast | FF2 | `scripts/player.gd`, `scenes/wall.tscn`, `scripts/wall.gd`, `scripts/tune.gd` | The spoon scoops crumbs; a toast wall soaks up tomatoes until it falls apart |
+| ✓ | FF4 Baskets + towels | FF2 | `scenes/chest.tscn`, `scripts/chest.gd`, `scripts/player.gd`, `scripts/tune.gd` | A picnic basket gives tomatoes and a towel; the towel wipes you clean |
+| ✓ | FF5 Jelly storm + umbrella | FF2 | `scenes/main.tscn`, `scenes/player.tscn`, `scripts/player.gd` | The storm looks like jelly; an umbrella opens while you float down |
+| ✓ | FF6 Art | FF2–FF5, `DESIGN.md` palette | `models/*.tscn`, `models/materials/*.tres`, `scenes/player.tscn`, `scenes/bot.tscn`, `scenes/main.tscn`, `icon.svg`, `CREDITS.md` | Chef, lunch buddies, broccoli, cheese, gingerbread houses, donuts; runs at 30 fps on the web |
+| ✓ | FF7 Sounds | FF2 | `tools/make_sfx.py`, `sounds/*.wav`, `scripts/sfx.gd`, `CREDITS.md` | You hear throw, splat, crunch, toast pop, jelly bubbles |
+| ✓ | FF8 Words | FF2–FF7 | `scripts/hud.gd`, `scenes/hud.tscn`, `scripts/touch.gd`, `scenes/lobby.tscn`, `scripts/game.gd` | No gun or HP word on any screen |
+| ✓ | LR1 Lunchroom design | Maintainer: "a lunchroom food fight, all small kindergartners, the lunchroom seems large" | `DESIGN.md`, `PLAN.md` | The design and the word list match |
+| ✓ | LR2 Lunchroom | LR1 | `scenes/main.tscn`, `models/*.tscn`, `models/materials/*.gdshader`, `scripts/game.gd` | 12 lunch tables, walls, windows, stage, counter; the room looks huge; 30 fps on the web |
+| ✓ | LR3 Table start + napkin | LR2 | `scripts/player.gd`, `scenes/player.tscn`, `scripts/game.gd`, `scripts/tune.gd` | Each player starts on a table; the napkin opens when you fall fast; you land and steer |
+| ✓ | LR4 Trays + lunch boxes | LR2 | `scenes/wall.tscn`, `scripts/wall.gd`, `scenes/chest.tscn`, `scripts/player.gd`, `scripts/tune.gd` | The spoon gets trays from tray carts; tray walls block tomatoes; lunch boxes give tomatoes and a napkin |
+| ✓ | LR5 Jello spill | LR2 | `models/materials/jello.gdshader`, `scenes/main.tscn`, `scripts/storm.gd` | The spill looks like see-through green jello |
+| ✓ | LR6 School screens | LR1 | `ui/school.tres`, `ui/*.gdshader`, `scenes/lobby.tscn`, `scenes/hud.tscn`, `scripts/hud.gd`, `scripts/touch.gd` | Chalkboard start screen, grade card, red slip, report card + gold star; fits at 720p |
+| ✓ | LR7 Sounds | LR2 | `tools/make_sfx.py`, `sounds/*.wav`, `scripts/sfx.gd` | Tray clink, tray clack, and a school bell at the start |
+| ✓ | LR8 Docs | LR1–LR7 | `README.md`, `FAQ.md`, `CHANGELOG.md`, `CREDITS.md`, `PLAYTEST.md`, `PLAN.md` | Player docs match the lunchroom |
+|  | FF9 Docs + ship | LR8 | `README.md`, `FAQ.md`, `CHANGELOG.md`, `PLAYTEST.md`, `PLAN.md`, tag `v0.3.0` | Player docs match the game; `v0.3.0` builds; the web link plays the lunchroom food fight |
 
 ### G2a steps
 1. `PLAN.md` + `Tune` autoload
@@ -115,9 +132,68 @@ G2 core loop: island, player, movement, camera, glide start.
 ### F1 steps
 1. Hide the online status line in solo matches (start screen keeps it)
 
+
+### FF2 steps
+1. A tomato: a red ball with a stem, flies in an arc, splats on what it touches
+2. A splat: a red puddle and drops that fade after 5 s (40 at most)
+3. Throw: aim with the crosshair, the arc lands on that spot
+4. Every screen sees each tomato; only the thrower's copy counts
+5. Bots throw too, and miss more from far away
+6. Clean meter: the shirt goes red as you get messy
+
+### FF3 steps
+1. Pickaxe → spoon: scoop crumbs from trees, cheese, and houses
+2. Walls → toast walls, with a crust edge
+
+### FF4 steps
+1. Chests → picnic baskets (red cloth lid, handle)
+2. Heal kits → towels
+
+### FF5 steps
+1. The storm: purple jelly, wobbly
+2. An umbrella opens over you while you float down
+
+### FF6 steps
+1. Chef player, lunch-buddy bots
+2. Broccoli trees, cheese wedges, gingerbread houses, donuts
+3. Icon: a tomato with a splat
+
+### FF7 steps
+1. throw, splat, harvest (crunch), build (toast pop), storm (jelly bubbles)
+
+### FF8 steps
+1. HUD, touch buttons (THROW, WIPE), start screen ("Food Fight"), end screen ("Splatted!", "Last one clean!")
+
+### LR2 steps
+1. Room 160×160 m, 32 m high: cinderblock walls, ceiling tiles, windows, pillars, stage, counter, menu board, clock
+2. 12 lunch tables (tops at 5.3 m, chrome posts you can run between), benches, trash cans, milk cartons, tray carts
+3. Small floor tiles and light haze, so the room looks even bigger
+
+### LR3 steps
+1. No sky drop: each player starts on a different table; the bell rings
+2. The napkin opens when you fall faster than 7.5 m/s; then sink at 3 m/s and steer
+
+### LR4 steps
+1. Toast walls → giant tray walls; crumbs → trays (from tray carts)
+2. Picnic baskets → metal lunch boxes; towels → napkins
+
+### LR5 steps
+1. The jello spill: see-through green with a bright edge and slow moving bands
+
+### LR6 steps
+1. One bold thing: the chalkboard start screen. Everything else is school paper
+2. Grade card (A+ to F), pocket card, red slip, report card with a gold star
+
+### LR7 steps
+1. harvest = tray clink, build = tray clack, new bell
+
+### FF9 steps
+1. README, FAQ, CHANGELOG match the lunchroom food fight
+2. Ask, then tag `v0.3.0`
+
 ## Bugs
 - Fixed (F2, v0.2.2): local mode flooded Output with "Key must not be empty" (GD-Sync `_unreliable_mac` has no key in local mode). MoveSync + StormSync now reliable in local mode only.
 - Fixed (T1): joiner's chest/wall requests were lost. GD-Sync's send-to-one-player keeps only 30 bits of the host's ID. Now `Net.tell_host` sends to everyone and only the host acts.
 - Fixed (T1): joiner never got control of their player. The host said "this one is yours" before the player existed on the joiner's screen. Now the host waits 1 s first.
-- Open (v0.2.2 ship): `net_test.py` fails 5/5: "No room NNNN" on the joiner. GD-Sync local mode finds rooms by UDP broadcast; the broadcast check could not run (permission denied). Recheck before the next ship.
-- Bots don't path around built walls (map is baked at start). Fix with the smart bots card.
+- Fixed (FF2 test): `net_test.py` "No room NNNN" was the test computer, not the game. GD-Sync local mode finds rooms by UDP broadcast, and the old test sandbox blocked it. With the local network open, all 69 checks pass.
+- Bots don't path around tray walls (map is baked at start). Fix with the smart bots card.

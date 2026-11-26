@@ -1,18 +1,38 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/lobby.gd" id="1_lobby"]
+[ext_resource type="Shader" path="res://ui/chalkboard.gdshader" id="2_board"]
+[ext_resource type="Material" path="res://ui/chalk.tres" id="3_chalk"]
+
+[sub_resource type="ShaderMaterial" id="board_mat"]
+shader = ExtResource("2_board")
+
+[sub_resource type="StyleBoxFlat" id="oak"]
+bg_color = Color(0.612, 0.42, 0.188, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.42, 0.27, 0.11, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 10
+shadow_offset = Vector2(0, 8)
 
 [sub_resource type="LabelSettings" id="big"]
-font_size = 96
-font_color = Color(0.914, 0.769, 0.416, 1)
-outline_size = 16
-outline_color = Color(0.482, 0.173, 0.749, 1)
+font_size = 92
+font_color = Color(0.96, 0.95, 0.9, 1)
+
+[sub_resource type="LabelSettings" id="sub"]
+font_size = 44
+font_color = Color(0.98, 0.86, 0.42, 1)
 
 [sub_resource type="LabelSettings" id="text"]
-font_size = 32
-font_color = Color(0.914, 0.769, 0.416, 1)
-outline_size = 8
-outline_color = Color(0.149, 0.275, 0.325, 1)
+font_size = 26
+font_color = Color(0.96, 0.95, 0.9, 0.85)
 
 [node name="Lobby" type="Control"]
 layout_mode = 3
@@ -30,6 +50,71 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+color = Color(0.722, 0.847, 0.753, 1)
+
+[node name="Frame" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 36.0
+offset_top = 30.0
+offset_right = -36.0
+offset_bottom = -44.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("oak")
+
+[node name="Board" type="ColorRect" parent="Frame"]
+material = SubResource("board_mat")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 22.0
+offset_top = 22.0
+offset_right = -22.0
+offset_bottom = -22.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.18, 0.29, 0.23, 1)
+
+[node name="Tray" type="ColorRect" parent="Frame"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -10.0
+offset_top = -8.0
+offset_right = 10.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0.52, 0.35, 0.15, 1)
+
+[node name="ChalkWhite" type="ColorRect" parent="Frame/Tray"]
+layout_mode = 0
+offset_left = 120.0
+offset_top = -6.0
+offset_right = 176.0
+offset_bottom = 2.0
+color = Color(0.96, 0.95, 0.9, 1)
+
+[node name="ChalkYellow" type="ColorRect" parent="Frame/Tray"]
+layout_mode = 0
+offset_left = 196.0
+offset_top = -6.0
+offset_right = 236.0
+offset_bottom = 2.0
+color = Color(0.98, 0.86, 0.42, 1)
+
+[node name="Eraser" type="ColorRect" parent="Frame/Tray"]
+layout_mode = 0
+offset_left = 270.0
+offset_top = -16.0
+offset_right = 380.0
+offset_bottom = 2.0
 color = Color(0.149, 0.275, 0.325, 1)
 
 [node name="Box" type="VBoxContainer" parent="."]
@@ -39,39 +124,52 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -300.0
-offset_top = -300.0
-offset_right = 300.0
-offset_bottom = 300.0
+offset_left = -310.0
+offset_top = -290.0
+offset_right = 310.0
+offset_bottom = 250.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 12
 alignment = 1
 
 [node name="Title" type="Label" parent="Box"]
+material = ExtResource("3_chalk")
 layout_mode = 2
 text = "Stormring"
 label_settings = SubResource("big")
 horizontal_alignment = 1
 
+[node name="Subtitle" type="Label" parent="Box"]
+material = ExtResource("3_chalk")
+layout_mode = 2
+text = "Lunchroom Food Fight"
+label_settings = SubResource("sub")
+horizontal_alignment = 1
+
 [node name="Status" type="Label" parent="Box"]
+material = ExtResource("3_chalk")
 layout_mode = 2
 text = "Connecting…"
 label_settings = SubResource("text")
 horizontal_alignment = 1
 autowrap_mode = 3
 
+[node name="Gap" type="Control" parent="Box"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
 [node name="Start" type="Button" parent="Box"]
 visible = false
-custom_minimum_size = Vector2(0, 72)
+custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 32
 text = "Start match"
 
 [node name="Host" type="Button" parent="Box"]
-custom_minimum_size = Vector2(0, 72)
+custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 32
 text = "Host a room"
 
 [node name="JoinRow" type="HBoxContainer" parent="Box"]
@@ -79,23 +177,23 @@ layout_mode = 2
 theme_override_constants/separation = 12
 
 [node name="Code" type="LineEdit" parent="Box/JoinRow"]
-custom_minimum_size = Vector2(0, 72)
+custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 32
 placeholder_text = "Room code"
 alignment = 1
 max_length = 4
 virtual_keyboard_type = 2
 
 [node name="Join" type="Button" parent="Box/JoinRow"]
-custom_minimum_size = Vector2(200, 72)
+custom_minimum_size = Vector2(200, 64)
 layout_mode = 2
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 32
 text = "Join"
 
 [node name="Solo" type="Button" parent="Box"]
-custom_minimum_size = Vector2(0, 72)
+custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 32
 text = "Play solo"

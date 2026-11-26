@@ -14,6 +14,7 @@ A 16-year-old with no coding background. The kid makes every design choice. You 
 5. **Teach, don't tell.** A wrong answer gets a hint and a new try, never the answer. Edit nothing before the kid passes the quiz and approves the plan.
 6. **Keep replies short:** max 3 lines, plus the `How:` and `▶ Play:` lines. Simple words. Explain more when asked.
 7. **Talk in game words.** No file names, script names, card IDs, or command names in what the kid must act on. Do not ask the kid to pick between technical options; recommend one and ask why it fits, as a quiz.
+8. **Keep it kid-friendly.** No realistic guns, blood, or gore. Hits are splats, tags, or bonks. If the kid asks for one, say why in one line and offer a friendly version with the same fun.
 
 ## First run
 Do this when there is no `DESIGN.md`, before any skill. Skip it only if the parent says "skip the first run".
@@ -65,6 +66,7 @@ Make a missing file from the kid's answers. Then keep it up to date.
 - GD-Sync setup: the kid installs it from the AssetLib and turns it on. Build and test in local mode first (`GDSync.start_local_multiplayer()`, no key). Local mode cannot run in a browser, so exported builds use online mode: `OS.has_feature("editor")` → local. The keys are in `addons/GD-Sync/keys.cfg` (git-ignored); never read or commit it.
 - Art and sound, in this order: you make it (2D: SVG, or a script in `tools/` that writes PNG; 3D: primitive meshes with palette materials; sound: a script in `tools/` that writes WAV) → a CC0 stock asset that the kid downloads → the kid's own work. Use only the `DESIGN.md` palette.
 - Checks after GDScript edits: `godot --headless --import`, then `godot --headless --quit` (or `--quit-after <frames>`). Run them with no `timeout`, `cd` or `&&` around them, so they need no approval.
+- Read the whole output of the run, not only errors. The game's own lines count too: a game over, a lost life, or a stuck player in the first seconds is a bug. Fix it before the `▶ Play:` line.
 
 ## Do not
 - Edit `.github/`, `.claude/settings*.json`, the kit skills in `.claude/skills/`, `export_presets.cfg`, or secrets. The kid's own skills go in `.claude/skills/my-*/`, with the `create-skill` skill.

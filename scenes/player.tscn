@@ -2,14 +2,8 @@
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 [ext_resource type="Script" path="res://addons/GD-Sync/Scripts/Types/PropertySynchronizer.gd" id="2_sync"]
-
-[sub_resource type="StandardMaterial3D" id="body_mat"]
-albedo_color = Color(0.149, 0.275, 0.325, 1)
-
-[sub_resource type="CapsuleMesh" id="body_mesh"]
-material = SubResource("body_mat")
-radius = 0.4
-height = 1.8
+[ext_resource type="PackedScene" path="res://models/kid.tscn" id="3_kid"]
+[ext_resource type="PackedScene" path="res://models/napkin.tscn" id="4_napkin"]
 
 [sub_resource type="CapsuleShape3D" id="body_shape"]
 radius = 0.4
@@ -29,9 +23,11 @@ size = Vector3(4, 4, 0.2)
 collision_mask = 3
 script = ExtResource("1_player")
 
-[node name="Body" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
-mesh = SubResource("body_mesh")
+[node name="Body" parent="." instance=ExtResource("3_kid")]
+
+[node name="Napkin" parent="Body" instance=ExtResource("4_napkin")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 0)
+visible = false
 
 [node name="Shape" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
@@ -49,7 +45,7 @@ broadcast = 2
 process = 1
 refresh_rate = 20
 node_path = NodePath("..")
-properties = PackedStringArray("position")
+properties = PackedStringArray("position", "body_yaw", "gliding")
 interpolated = true
 interpolation_speed = 20.0
 
@@ -58,7 +54,7 @@ script = ExtResource("2_sync")
 refresh_rate = 10
 node_path = NodePath("..")
 reliable = true
-properties = PackedStringArray("hp", "heal_left")
+properties = PackedStringArray("hp", "wipe_left")
 
 [node name="CamYaw" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)

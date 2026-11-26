@@ -1,23 +1,44 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/chest.gd" id="1_chest"]
-
-[sub_resource type="StandardMaterial3D" id="dark"]
-albedo_color = Color(0.149, 0.275, 0.325, 1)
-
-[sub_resource type="StandardMaterial3D" id="sand"]
-albedo_color = Color(0.914, 0.769, 0.416, 1)
+[ext_resource type="Material" path="res://models/materials/blue.tres" id="2_blue"]
+[ext_resource type="Material" path="res://models/materials/cheese.tres" id="3_cheese"]
+[ext_resource type="Material" path="res://models/materials/chrome.tres" id="4_chrome"]
+[ext_resource type="Material" path="res://models/materials/tomato.tres" id="5_tomato"]
 
 [sub_resource type="BoxMesh" id="box_mesh"]
-material = SubResource("dark")
-size = Vector3(1.2, 0.7, 0.8)
+material = ExtResource("2_blue")
+size = Vector3(1.6, 1.0, 0.7)
 
 [sub_resource type="BoxMesh" id="lid_mesh"]
-material = SubResource("sand")
-size = Vector3(1.3, 0.2, 0.9)
+material = ExtResource("2_blue")
+size = Vector3(1.64, 0.16, 0.74)
+
+[sub_resource type="BoxMesh" id="sticker_mesh"]
+material = ExtResource("3_cheese")
+size = Vector3(1.2, 0.6, 0.02)
+
+[sub_resource type="CylinderMesh" id="apple_mesh"]
+material = ExtResource("5_tomato")
+top_radius = 0.18
+bottom_radius = 0.18
+height = 0.03
+radial_segments = 10
+rings = 1
+
+[sub_resource type="BoxMesh" id="latch_mesh"]
+material = ExtResource("4_chrome")
+size = Vector3(0.12, 0.22, 0.06)
+
+[sub_resource type="TorusMesh" id="handle_mesh"]
+material = ExtResource("4_chrome")
+inner_radius = 0.3
+outer_radius = 0.38
+rings = 12
+ring_segments = 6
 
 [sub_resource type="BoxShape3D" id="box_shape"]
-size = Vector3(1.2, 0.9, 0.8)
+size = Vector3(1.6, 1.2, 0.7)
 
 [sub_resource type="SphereShape3D" id="reach_shape"]
 radius = 2.0
@@ -26,15 +47,42 @@ radius = 2.0
 script = ExtResource("1_chest")
 
 [node name="Box" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 mesh = SubResource("box_mesh")
 
-[node name="Lid" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+[node name="Sticker" type="MeshInstance3D" parent="."]
+visibility_range_end = 40.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.36)
+mesh = SubResource("sticker_mesh")
+
+[node name="Apple" type="MeshInstance3D" parent="."]
+visibility_range_end = 40.0
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.5, -0.375)
+mesh = SubResource("apple_mesh")
+
+[node name="Lid" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08, 0)
+
+[node name="Top" type="MeshInstance3D" parent="Lid"]
 mesh = SubResource("lid_mesh")
 
+[node name="Handle" type="MeshInstance3D" parent="Lid"]
+visibility_range_end = 40.0
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.3, 0)
+mesh = SubResource("handle_mesh")
+
+[node name="LatchL" type="MeshInstance3D" parent="."]
+visibility_range_end = 40.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 0.95, -0.37)
+mesh = SubResource("latch_mesh")
+
+[node name="LatchR" type="MeshInstance3D" parent="."]
+visibility_range_end = 40.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 0.95, -0.37)
+mesh = SubResource("latch_mesh")
+
 [node name="Shape" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
 shape = SubResource("box_shape")
 
 [node name="Reach" type="Area3D" parent="."]
@@ -45,10 +93,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("reach_shape")
 
 [node name="Label" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0, 0)
 billboard = 1
 no_depth_test = true
-modulate = Color(0.914, 0.769, 0.416, 1)
+modulate = Color(1, 0.945, 0.839, 1)
 outline_modulate = Color(0.149, 0.275, 0.325, 1)
 font_size = 48
 outline_size = 12

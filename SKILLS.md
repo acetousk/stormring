@@ -22,7 +22,7 @@ The questions are not a test you can fail. They make sure that **you** understan
 | `idea: …`, "add …", "can it …" | `feature` | Claude says if it fits, and offers a smaller version if it is big. Then it makes a plan and builds 1 step at a time. | Answer the quiz, approve, play |
 | `bug: …`, "it crashed", "broken" | `bug` | Claude asks for proof, finds the cause, and fixes only that. | Paste the **exact** red line from Output, or send a screenshot. Help find the cause. Answer the quiz. Then play to check it. |
 | "ship it", "release", "publish" | `ship` | Claude checks the game, picks the version, and sends it to GitHub. About 10 minutes later: web, phone, and PC. | Answer the quiz about what is new. Say **go**. Click **Allow** on the pop-ups. |
-| "draw …", "a sprite for …", "new icon" | `create-2d` | Claude makes 2D art in your palette | Answer the quiz, approve. Then keep, change, or undo |
+| "draw …", "a sprite for …", "new icon", "make the menu look like …" | `create-2d` | Claude makes 2D art and screen looks in your palette | Answer the quiz, approve. Then keep, change, or undo |
 | "a model for …", "make a tree" | `create-3d` | Claude makes a 3D model from simple shapes in your palette | Answer the quiz, approve. Then keep, change, or undo |
 | "a sound for …", "music" | `create-audio` | Claude writes a script that makes the sound, then plays it in the game | Answer the quiz, approve. Listen. Keep, change, or undo. |
 | "a sky", "the background is boring", "make it night" | `create-background` | 2D: layers that move at different speeds. 3D: sky, sun, light. | Answer the quiz, approve. Check that you can still see the player |

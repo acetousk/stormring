@@ -1,0 +1,132 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://models/materials/chrome.tres" id="1_chrome"]
+[ext_resource type="Material" path="res://models/materials/crust.tres" id="2_crust"]
+[ext_resource type="Material" path="res://models/materials/dark.tres" id="3_dark"]
+[ext_resource type="Material" path="res://models/materials/orange.tres" id="4_orange"]
+
+[sub_resource type="BoxMesh" id="m0"]
+material = ExtResource("1_chrome")
+size = Vector3(0.2, 4.2, 2.6)
+
+[sub_resource type="BoxMesh" id="m1"]
+material = ExtResource("1_chrome")
+size = Vector3(0.2, 4.2, 2.6)
+
+[sub_resource type="BoxMesh" id="m2"]
+material = ExtResource("1_chrome")
+size = Vector3(3.6, 0.2, 2.6)
+
+[sub_resource type="BoxMesh" id="m3"]
+material = ExtResource("2_crust")
+size = Vector3(3.2, 0.12, 2.3)
+
+[sub_resource type="BoxMesh" id="m4"]
+material = ExtResource("4_orange")
+size = Vector3(3.2, 0.12, 2.3)
+
+[sub_resource type="BoxMesh" id="m5"]
+material = ExtResource("2_crust")
+size = Vector3(3.2, 0.12, 2.3)
+
+[sub_resource type="BoxMesh" id="m6"]
+material = ExtResource("4_orange")
+size = Vector3(3.2, 0.12, 2.3)
+
+[sub_resource type="BoxMesh" id="m7"]
+material = ExtResource("2_crust")
+size = Vector3(3.2, 0.12, 2.3)
+
+[sub_resource type="BoxMesh" id="m8"]
+material = ExtResource("4_orange")
+size = Vector3(3.2, 0.12, 2.3)
+
+[sub_resource type="CylinderMesh" id="m9"]
+material = ExtResource("3_dark")
+top_radius = 0.2
+bottom_radius = 0.2
+height = 0.15
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="m10"]
+material = ExtResource("3_dark")
+top_radius = 0.2
+bottom_radius = 0.2
+height = 0.15
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="m11"]
+material = ExtResource("3_dark")
+top_radius = 0.2
+bottom_radius = 0.2
+height = 0.15
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="m12"]
+material = ExtResource("3_dark")
+top_radius = 0.2
+bottom_radius = 0.2
+height = 0.15
+radial_segments = 8
+rings = 1
+
+[node name="TrayCart" type="Node3D"]
+
+[node name="FrameL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7, 2.3, 0)
+mesh = SubResource("m0")
+
+[node name="FrameR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 2.3, 0)
+mesh = SubResource("m1")
+
+[node name="Base" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+mesh = SubResource("m2")
+
+[node name="Tray0" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+mesh = SubResource("m3")
+
+[node name="Tray1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+mesh = SubResource("m4")
+
+[node name="Tray2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
+mesh = SubResource("m5")
+
+[node name="Tray3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, 0)
+mesh = SubResource("m6")
+
+[node name="Tray4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.3, 0)
+mesh = SubResource("m7")
+
+[node name="Tray5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.9, 0)
+mesh = SubResource("m8")
+
+[node name="Wheel0" type="MeshInstance3D" parent="."]
+visibility_range_end = 40.0
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, -1.5, 0.2, -1.1)
+mesh = SubResource("m9")
+
+[node name="Wheel1" type="MeshInstance3D" parent="."]
+visibility_range_end = 40.0
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 1.5, 0.2, -1.1)
+mesh = SubResource("m10")
+
+[node name="Wheel2" type="MeshInstance3D" parent="."]
+visibility_range_end = 40.0
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, -1.5, 0.2, 1.1)
+mesh = SubResource("m11")
+
+[node name="Wheel3" type="MeshInstance3D" parent="."]
+visibility_range_end = 40.0
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 1.5, 0.2, 1.1)
+mesh = SubResource("m12")

@@ -1,16 +1,18 @@
 extends Node
 ## Sfx: plays the game's sounds (made by tools/make_sfx.py).
-##   Sfx.play("shot", global_position)  → a sound at a spot (quieter far away)
+##   Sfx.play("splat", global_position)  → a sound at a spot (quieter far away)
+##   Sfx.play_everywhere("bell")        → a sound you hear the same everywhere
 ##   Sfx.loop("storm", true / false)    → a sound that repeats until you stop it
 ## Browsers and phones block sound until you click or tap,
 ## so nothing plays before your first click, tap, or key press.
 
 const SOUNDS := {
-	"shot": preload("res://sounds/shot.wav"),
-	"hit": preload("res://sounds/hit.wav"),
+	"throw": preload("res://sounds/throw.wav"),
+	"splat": preload("res://sounds/splat.wav"),
 	"harvest": preload("res://sounds/harvest.wav"),
 	"build": preload("res://sounds/build.wav"),
 	"storm": preload("res://sounds/storm.wav"),
+	"bell": preload("res://sounds/bell.wav"),
 }
 const MAX_AT_ONCE := 16 ## More than this at the same moment are skipped (keeps phones fast)
 const HEAR_DISTANCE := 70.0 ## Meters: farther than this you hear nothing
@@ -51,7 +53,19 @@ func play(sound: String, where: Vector3) -> void:
 	player.play()
 
 
-## A sound that every screen hears (online), like a shot. In solo, just here.
+## A sound everywhere at once (not at a spot), like the school bell.
+func play_everywhere(sound: String) -> void:
+	if not unlocked:
+		return
+	var player := AudioStreamPlayer.new()
+	player.stream = SOUNDS[sound]
+	player.volume_db = linear_to_db(Tune.sfx_volume)
+	add_child(player)
+	player.finished.connect(player.queue_free)
+	player.play()
+
+
+## A sound that every screen hears (online), like a throw. In solo, just here.
 ## (game.gd lets other screens call play() when the match starts.)
 func play_for_everyone(sound: String, where: Vector3) -> void:
 	Net.tell_everyone(play, sound, where)

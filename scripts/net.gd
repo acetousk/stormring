@@ -88,7 +88,7 @@ func is_host() -> bool:
 	return not online or GDSync.is_host()
 
 
-## Host only: close the room and load the island on every screen.
+## Host only: close the room and load the lunchroom on every screen.
 func start_match() -> void:
 	if not in_room_as_host():
 		return

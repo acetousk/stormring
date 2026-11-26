@@ -1,7 +1,7 @@
 extends Fighter
-## A bot: a capsule with a small brain.
+## A bot (a lunch buddy) with a small brain.
 ## STORM = outside the circle, run to the middle (this comes first).
-## ROAM = walk to random spots in the circle. FIGHT = sees someone, strafes and shoots.
+## ROAM = walk to random spots in the circle. FIGHT = sees someone, steps side to side and throws tomatoes.
 
 enum Mode { ROAM, FIGHT, STORM }
 
@@ -9,9 +9,7 @@ const EYE := Vector3(0, 1.5, 0)
 
 var mode := Mode.ROAM
 var target: Node3D = null
-var ammo := 0
-var fire_cooldown := 0.0
-var reloading := false
+var throw_cooldown := 0.0
 var look_timer := 0.0
 var strafe_dir := 1.0
 var strafe_timer := 0.0
@@ -22,9 +20,8 @@ var strafe_timer := 0.0
 func _ready() -> void:
 	add_to_group("bot")
 	add_to_group("fighter")
-	ammo = Tune.rifle_mag
 	_net_ready()
-	# Wait one frame so the island map is ready, then pick a place to walk to.
+	# Wait one frame so the lunchroom map is ready, then pick a place to walk to.
 	await get_tree().physics_frame
 	_pick_roam_point()
 
@@ -119,41 +116,21 @@ func _fight(delta: float) -> void:
 	var side := global_basis.x * strafe_dir * Tune.bot_speed * 0.6
 	velocity.x = side.x
 	velocity.z = side.z
-	# Shoot bursts, reload when empty.
-	fire_cooldown -= delta
-	if reloading:
+	# Throw a tomato every so often.
+	throw_cooldown -= delta
+	if throw_cooldown <= 0.0:
+		throw_cooldown = Tune.bot_throw_every * randf_range(0.8, 1.2)
+		_throw_tomato()
+
+
+## One bot tomato. Bots aim a bit off on purpose: far = more off, close = less.
+func _throw_tomato() -> void:
+	if not _can_see(target):
 		return
-	if ammo <= 0:
-		_reload()
-	elif fire_cooldown <= 0.0:
-		_fire_burst()
-
-
-func _reload() -> void:
-	reloading = true
-	await get_tree().create_timer(Tune.rifle_reload_time).timeout
-	ammo = Tune.rifle_mag
-	reloading = false
-
-
-func _fire_burst() -> void:
-	fire_cooldown = Tune.rifle_fire_every
-	for i in Tune.rifle_burst_shots:
-		if ammo <= 0 or not is_instance_valid(target):
-			return
-		ammo -= 1
-		_shoot_bullet()
-		await get_tree().create_timer(Tune.rifle_burst_gap).timeout
-
-
-## One bot bullet. Close = better aim, far = worse aim.
-func _shoot_bullet() -> void:
-	Sfx.play_for_everyone("shot", global_position) # Bots run on the host; everyone hears.
 	var dist := global_position.distance_to(target.global_position)
 	var closeness := 1.0 - clampf(dist / Tune.bot_sight, 0.0, 1.0)
-	var accuracy := lerpf(Tune.bot_accuracy_far, Tune.bot_accuracy_near, closeness)
-	if randf() > accuracy:
-		return
-	if _can_see(target):
-		if target is Fighter:
-			target.hurt(Tune.rifle_damage, self)
+	var miss := lerpf(Tune.bot_miss_far, Tune.bot_miss_near, closeness)
+	var off := Vector3(randf_range(-1, 1), randf_range(-0.5, 0.5), randf_range(-1, 1)) * miss
+	var aim: Vector3 = target.global_position + Vector3(0, 1.0, 0) + off
+	var hand := global_position + Vector3(0, 1.4, 0) + global_basis.x * 0.5
+	get_tree().current_scene.throw_food(hand, Tune.throw_speed, aim, self)
