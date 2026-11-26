@@ -2,6 +2,7 @@ extends Node
 ## Sfx: plays the game's sounds (made by tools/make_sfx.py).
 ##   Sfx.play("splat", global_position)  → a sound at a spot (quieter far away)
 ##   Sfx.play_everywhere("bell")        → a sound you hear the same everywhere
+##   Sfx.play_here("hit")               → a sound only on this screen (your own hit "ding")
 ##   Sfx.loop("storm", true / false)    → a sound that repeats until you stop it
 ## Browsers and phones block sound until you click or tap,
 ## so nothing plays before your first click, tap, or key press.
@@ -13,6 +14,10 @@ const SOUNDS := {
 	"build": preload("res://sounds/build.wav"),
 	"storm": preload("res://sounds/storm.wav"),
 	"bell": preload("res://sounds/bell.wav"),
+	"hit": preload("res://sounds/hit.wav"),
+	"ouch": preload("res://sounds/ouch.wav"),
+	"pickup": preload("res://sounds/pickup.wav"),
+	"out": preload("res://sounds/out.wav"),
 }
 const MAX_AT_ONCE := 16 ## More than this at the same moment are skipped (keeps phones fast)
 const HEAR_DISTANCE := 70.0 ## Meters: farther than this you hear nothing
@@ -51,6 +56,12 @@ func play(sound: String, where: Vector3) -> void:
 	player.tree_exiting.connect(func() -> void: _playing -= 1)
 	_playing += 1
 	player.play()
+
+
+## A sound only on this screen, not at a spot (your "ding" when you hit someone).
+## Same as play_everywhere: online, the other screens do not hear it.
+func play_here(sound: String) -> void:
+	play_everywhere(sound)
 
 
 ## A sound everywhere at once (not at a spot), like the school bell.

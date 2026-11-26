@@ -56,6 +56,13 @@ height = 0.26
 radial_segments = 8
 rings = 4
 
+[sub_resource type="CapsuleMesh" id="arm"]
+material = ExtResource("3_sand")
+radius = 0.09
+height = 0.6
+radial_segments = 8
+rings = 2
+
 [node name="Buddy" type="Node3D"]
 
 [node name="Legs" type="MeshInstance3D" parent="."]
@@ -91,5 +98,13 @@ mesh = SubResource("m6")
 
 [node name="Hand" type="MeshInstance3D" parent="."]
 visibility_range_end = 40.0
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0.95, -0.15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.48, 0.74, -0.02)
 mesh = SubResource("m7")
+
+[node name="ArmL" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.985, 0.174, 0, -0.174, 0.985, 0, 0, 0, 1, -0.42, 1.05, 0)
+mesh = SubResource("arm")
+
+[node name="ArmR" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.985, -0.174, 0, 0.174, 0.985, 0, 0, 0, 1, 0.42, 1.05, 0)
+mesh = SubResource("arm")

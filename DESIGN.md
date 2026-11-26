@@ -46,9 +46,11 @@
 - **Lunch boxes:** 8 metal lunch boxes (hold E 0.5 s): tomatoes + 1 napkin (+50 clean over 3 s, max 2)
 - **Clean meter:** 100, no shield. Your shirt turns more tomato red as you get messy. The HUD shows it as a grade (A+ to F)
 - **Jello spill:** 1 phase. Waits 35 s, closes in from 80 m to 0 over 90 s. Outside, you lose 2 → 10 clean per second as it closes in
-- **Bots:** 3 lunch buddies (cheese-yellow shirts, blue caps). Roam inside the circle (NavigationAgent3D), throw on sight (45 m, every 0.8 s, miss by 3 m far → 0.6 m near). They throw at each other too
-- **HUD:** grade card (clean), pocket card (trays, napkins, tomatoes), kids left, jello clock, crosshair, a red slip "Get out of the jello spill!"
-- **Screens:** chalkboard start screen; a report card at the end ("Splatted!" or "Last one clean!", grade, place, splats, time; a gold star when you win)
+- **Bots:** 3 lunch buddies with names (Max, Rosa, Ollie…) over their heads, each in a different palette shirt (never red: red means messy), blue caps. Roam inside the circle (NavigationAgent3D), throw on sight (45 m, every 0.8 s, miss by 3 m far → 0.6 m near). They throw at each other too, and turn on whoever splats them. Each bot has 1 napkin and wipes below 40 clean
+- **HUD:** grade card (clean), pocket card (trays, napkins, tomatoes), kids left, jello clock, crosshair, a red slip "Get out of the jello spill! 13 m" with an arrow to the safe middle
+- **Feedback:** your hit → "Splat!" on the crosshair + a hit sound. A tomato hit on you → tomato mess on the screen edge it came from + an "ouch" (the jello does not make this mess). A splat feed top left ("Max splatted Rosa"). Floating words for loot ("+6 tomatoes +1 napkin", "+1 tray"). A floating tomato over each unopened lunch box. A cream trail behind each tomato
+- **Coach:** one tip at the top until you do it: jump off the table, open a lunch box, throw, wipe (when under 60 clean with a napkin). After the first throw, a tray wall tip for 8 s
+- **Screens:** chalkboard start screen; a report card at the end ("Splatted by Max!", "Jello'd!" or "Last one clean!", grade, place, splats, time; a win gets an A+ and a gold star). When you are splatted, the camera turns to the one who did it
 
 ## Words (old → new)
 | Old | New |
@@ -93,7 +95,7 @@
 | Dark | `#264653` | outlines, eyes |
 
 ## Sound
-- `tools/make_sfx.py` writes WAVs: throw (whoosh), splat, harvest (tray clink), build (tray clack), storm (jello wobble), bell (school bell at the start)
+- `tools/make_sfx.py` writes WAVs: throw (whoosh), splat, harvest (tray clink), build (tray clack), storm (jello wobble), bell (school bell at the start), hit (your splat landed), ouch (you got hit), pickup (lunch box), out (someone is out)
 - No sound before the first click or tap
 
 ## Not in v1.0 (later cards)
@@ -101,9 +103,9 @@
 - Ramp
 - A lunch lady cart that drives a line across the room at the start
 - 3 jello phases with a moving center
-- Smart bots: loot, cover, build walls, wipe clean; up to 9 bots
-- Splat feed, minimap circle, hit markers
-- Effects: throw swoosh trail, splat ticks, harvest shake + "+10", jello heartbeat, napkin wind
+- Smart bots: loot, cover, build walls; up to 9 bots
+- Minimap circle
+- Effects: splat ticks, harvest shake, jello heartbeat, napkin wind
 - Crouch
 - Online: a new host if the host leaves; host checks hits (fair play)
 

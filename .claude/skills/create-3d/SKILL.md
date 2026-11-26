@@ -27,8 +27,10 @@ Use the gate in `game-plan` section 3: teach → plan → quiz (hints, never the
 - Original only. Never copy another game's characters, weapons, or look.
 - Keep it low: about 3–12 parts per model.
 - Many of the same thing (trees, rocks, grass): use `MultiMeshInstance3D`, not hundreds of nodes.
-- Make the front easy to see (a nose, a visor, or a colour stripe), so the kid can see where it faces.
+- Make the front easy to see (a nose, a visor, or a colour stripe), so the kid can see where it faces. The front is -Z in Godot: eyes and noses go on the -Z side, so `look_at` turns it the right way. Imported `.glb` models face +Z: turn them 180° in their scene, or use `look_at(target, Vector3.UP, true)`.
+- A character needs a head, a body, two arms, and eyes. Without arms or a face it looks like a block from far away.
+- Many copies of one character (bots, enemies): give each copy its own palette colour (duplicate the material per copy). Never use a colour that has a meaning in the game for this (for example red = hurt).
 - Add it to `CREDITS.md`: file, who made it, license.
 
 ## 4. Show it
-Put it in the main scene in the same step. `▶ Play: <where to look> — look for <the model>`. Ask "keep, change, or undo?".
+Look at it yourself first: put it next to the player and take a screenshot. Run with a window (not `--headless`), wait for `await RenderingServer.frame_post_draw`, then `get_viewport().get_texture().get_image().save_png(...)` into `res://.godot/` (or use the robot playtest in `feature` 4b). Check the size, the colours, and the front. Then put it in the main scene in the same step. `▶ Play: <where to look> — look for <the model>`. Ask "keep, change, or undo?".

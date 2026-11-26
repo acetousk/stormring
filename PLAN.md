@@ -37,6 +37,7 @@ LR lunchroom: the food fight moves to a giant 80s school lunchroom, and everyone
 | ✓ | LR6 School screens | LR1 | `ui/school.tres`, `ui/*.gdshader`, `scenes/lobby.tscn`, `scenes/hud.tscn`, `scripts/hud.gd`, `scripts/touch.gd` | Chalkboard start screen, grade card, red slip, report card + gold star; fits at 720p |
 | ✓ | LR7 Sounds | LR2 | `tools/make_sfx.py`, `sounds/*.wav`, `scripts/sfx.gd` | Tray clink, tray clack, and a school bell at the start |
 | ✓ | LR8 Docs | LR1–LR7 | `README.md`, `FAQ.md`, `CHANGELOG.md`, `CREDITS.md`, `PLAYTEST.md`, `PLAN.md` | Player docs match the lunchroom |
+| ✓ | LR9 Game feel | Maintainer: "improve gameplay and assets"; robot playtest (`tools/autoplay.gd`) | `scripts/hud.gd`, `scripts/food.gd`, `scripts/health.gd`, `scripts/bot.gd`, `scripts/game.gd`, `scripts/chest.gd`, `scripts/player.gd`, `scripts/sfx.gd`, `scripts/tune.gd`, `tools/make_sfx.py`, `sounds/*.wav`, `models/kid.tscn`, `models/buddy.tscn`, `tools/autoplay.gd` | You see and hear every hit, know who hit you and from where, tell the bots apart, and find the way out of the jello; the robot playtest has no errors |
 |  | FF9 Docs + ship | LR8 | `README.md`, `FAQ.md`, `CHANGELOG.md`, `PLAYTEST.md`, `PLAN.md`, tag `v0.3.0` | Player docs match the game; `v0.3.0` builds; the web link plays the lunchroom food fight |
 
 ### G2a steps

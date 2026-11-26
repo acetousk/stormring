@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Makes the 6 Stormring lunchroom food fight sounds out of math and writes them to sounds/*.wav.
+"""Makes the 10 Stormring lunchroom food fight sounds out of math and writes them to sounds/*.wav.
 
 Run from the project folder:   python3 tools/make_sfx.py
 Change a number below and run it again to change a sound.
@@ -121,6 +121,62 @@ def storm():
     return out
 
 
+def tone(i, freq, decay):
+    """A plain beep that fades out."""
+    t = i / RATE
+    return math.sin(2 * math.pi * freq * t) * math.exp(-decay * t)
+
+
+def hit():
+    # Your "ding": your tomato hit someone. Two quick happy notes going up.
+    n = len(seconds(0.25))
+    out = []
+    for i in range(n):
+        first = tone(i, 1320, 25) if i < n // 3 else 0.0
+        j = i - n // 3
+        second = tone(j, 1760, 14) if j >= 0 else 0.0
+        out.append(0.45 * first + 0.5 * second)
+    return out
+
+
+def ouch():
+    # A tomato hit YOU: a squishy "blap" that slides down, a bit lower than a splat.
+    n = len(seconds(0.28))
+    noise = lowpass([random.uniform(-1, 1) for _ in range(n)], 0.8)
+    out, phase = [], 0.0
+    for i in range(n):
+        freq = 160 * fade(i, n, 3) + 50
+        phase += 2 * math.pi * freq / RATE
+        out.append(0.7 * math.sin(phase) * fade(i, n, 6) + 1.0 * noise[i] * fade(i, n, 9))
+    return out
+
+
+def pickup():
+    # A lunch box opens: a metal latch "click", then three notes going up.
+    n = len(seconds(0.5))
+    out = [0.0] * n
+    for j in range(int(0.05 * RATE)):
+        out[j] += 0.5 * metal(j, [(2400, 0.7), (3900, 0.3)], 120)
+    for k, freq in enumerate([784, 988, 1175]):
+        start = int((0.08 + 0.09 * k) * RATE)
+        for j in range(n - start):
+            out[start + j] += 0.32 * tone(j, freq, 12)
+    return out
+
+
+def out_sound():
+    # Someone is splatted out of the round: a "wah-wah" that slides down.
+    n = len(seconds(0.7))
+    out, phase = [], 0.0
+    for i in range(n):
+        t = i / RATE
+        freq = 440 - 260 * (i / n) + 12 * math.sin(2 * math.pi * 7 * t)
+        phase += 2 * math.pi * freq / RATE
+        wave_ = math.sin(phase) + 0.3 * math.sin(2 * phase)
+        out.append(0.35 * wave_ * min(1.0, 8 * t) * fade(i, n, 2))
+    return lowpass(out, 0.3)
+
+
 def write(name, samples):
     path = os.path.join(OUT, name + ".wav")
     with wave.open(path, "wb") as f:
@@ -135,5 +191,6 @@ def write(name, samples):
 if __name__ == "__main__":
     os.makedirs(OUT, exist_ok=True)
     for name, make in [("throw", throw), ("splat", splat), ("harvest", harvest),
-                       ("build", build), ("storm", storm), ("bell", bell)]:
+                       ("build", build), ("storm", storm), ("bell", bell),
+                       ("hit", hit), ("ouch", ouch), ("pickup", pickup), ("out", out_sound)]:
         write(name, make())

@@ -2,6 +2,7 @@ extends Fighter
 ## A bot (a lunch buddy) with a small brain.
 ## STORM = outside the circle, run to the middle (this comes first).
 ## ROAM = walk to random spots in the circle. FIGHT = sees someone, steps side to side and throws tomatoes.
+## A bot fights back at whoever hit it, and wipes itself with a napkin when it gets messy.
 
 enum Mode { ROAM, FIGHT, STORM }
 
@@ -13,6 +14,9 @@ var throw_cooldown := 0.0
 var look_timer := 0.0
 var strafe_dir := 1.0
 var strafe_timer := 0.0
+## Bots carry napkins too, and wipe themselves when they get messy.
+var napkins := Tune.bot_napkins
+var wipe_left := 0.0
 
 @onready var agent: NavigationAgent3D = $Agent
 
@@ -21,9 +25,25 @@ func _ready() -> void:
 	add_to_group("bot")
 	add_to_group("fighter")
 	_net_ready()
+	_make_name_tag()
 	# Wait one frame so the lunchroom map is ready, then pick a place to walk to.
 	await get_tree().physics_frame
 	_pick_roam_point()
+
+
+## A name over my head, the same name the splat feed uses.
+func _make_name_tag() -> void:
+	var tag := Label3D.new()
+	tag.text = nice_name()
+	tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	tag.font_size = 48
+	tag.pixel_size = 0.006
+	tag.modulate = Color(1, 0.945, 0.839)
+	tag.outline_modulate = Color(0.149, 0.275, 0.325)
+	tag.outline_size = 10
+	tag.position = Vector3(0, 2.6, 0)
+	tag.visibility_range_end = 30.0 # Far away, the name goes away (less clutter).
+	add_child(tag)
 
 
 ## Choose a random spot inside the safe circle and ask the map for a path there.
@@ -46,8 +66,15 @@ func _can_see(other: Node3D) -> bool:
 
 
 ## Find the closest player or bot I can see within sight range.
+## Someone who just splatted me comes first, if I can see them.
 func _look_for_target() -> void:
 	target = null
+	if is_instance_valid(last_hit_by) and not last_hit_by.is_out and _can_see(last_hit_by) \
+			and global_position.distance_to(last_hit_by.global_position) < Tune.bot_sight * 1.3:
+		target = last_hit_by
+		mode = Mode.FIGHT
+		_check_storm()
+		return
 	var best := Tune.bot_sight
 	for other in get_tree().get_nodes_in_group("fighter"):
 		if other == self:
@@ -57,7 +84,11 @@ func _look_for_target() -> void:
 			best = dist
 			target = other
 	mode = Mode.FIGHT if target else Mode.ROAM
-	# The storm comes first: if I am outside, run to the middle.
+	_check_storm()
+
+
+## The jello comes first: if I am outside, run to the middle.
+func _check_storm() -> void:
 	var storm := get_tree().get_first_node_in_group("storm")
 	if storm and not storm.is_safe(global_position):
 		mode = Mode.STORM
@@ -70,6 +101,7 @@ func _physics_process(delta: float) -> void:
 		return
 	if not is_on_floor():
 		velocity.y -= Tune.gravity * delta
+	_wipe(delta)
 
 	# Look around a few times a second (not every frame, to save power).
 	look_timer -= delta
@@ -86,6 +118,17 @@ func _physics_process(delta: float) -> void:
 			_pick_roam_point()
 		_follow_path()
 	move_and_slide()
+
+
+## Messy? Use a napkin, and get cleaner bit by bit (like the player).
+func _wipe(delta: float) -> void:
+	if wipe_left <= 0.0 and napkins > 0 and hp < Tune.bot_wipe_below:
+		napkins -= 1
+		wipe_left = Tune.napkin_clean
+	if wipe_left > 0.0:
+		var step := minf(Tune.napkin_clean / Tune.napkin_time * delta, wipe_left)
+		wipe_left -= step
+		hp = minf(hp + step, Tune.max_hp)
 
 
 ## Walk toward the next corner of the path.

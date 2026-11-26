@@ -31,7 +31,7 @@ Use the gate in `game-plan` section 3: teach → plan → quiz (hints, never the
 
 ## 4. Screens and menus ("make the screens look like …")
 Use this for the start screen, the HUD, and the end screen, in 2D and 3D games.
-1. **Ask what the look is made of.** One question: "What real thing do these screens look like?" (a school, a comic, a space ship). Write the answer and its colours in `DESIGN.md` under "UI style".
+1. **Ask what the look is made of.** One question: "What real thing do these screens look like?" (a school, a comic, a space ship). After the kid approves the plan, write the answer and its colours in `DESIGN.md` under "UI style".
 2. **One bold thing.** Pick one screen element to be the memorable one (for example a chalkboard start screen). Keep the rest quiet and simple. Ask the kid which element it is, as a quiz with a hint.
 3. **One Theme.** Make one `ui/<name>.tres` Theme with the palette colours (StyleBoxFlat for panels and buttons, font sizes, a clear focus style for keyboard and gamepad). Set it on each screen's top Control. Do not colour each node by hand.
 4. **Real things from simple parts:** StyleBoxFlat (borders, corners, shadows), a small `canvas_item` shader for a texture (chalk, paper, metal), and SVG for small pictures. No downloaded fonts: use Godot's built-in font, made bigger or bolder in the Theme.

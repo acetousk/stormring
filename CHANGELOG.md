@@ -1,5 +1,23 @@
 # Changelog
 
+## Not released yet
+
+- Added: you see and hear your hits: "Splat!" on the crosshair and a hit sound.
+- Added: when a tomato hits you, tomato mess shows on the side of the screen it came from, with an "ouch".
+- Added: a splat feed in the top left ("Max splatted Rosa").
+- Added: the lunch buddies have names over their heads and different shirt colors.
+- Added: a floating tomato shows each lunch box you have not opened yet.
+- Added: tips at the top for your first match: jump off the table, open a lunch box, throw, wipe with a napkin, and build a tray wall.
+- Changed: the clean card says "Clean (0% = out)".
+- Added: outside the jello, an arrow and the meters to the safe middle.
+- Added: "+6 tomatoes +1 napkin" and "+1 tray" float up when you get them. New sounds for loot and for a kid who is out.
+- Added: tomatoes leave a short trail, so you can follow them.
+- Added: the kids have arms.
+- Changed: a bot turns on whoever splats it, and wipes with a napkin when it gets messy.
+- Changed: the report card says who splatted you ("Splatted by Max!"), and the camera turns to them. A win always gets an A+.
+- Fixed: you could start on a table outside the jello circle and get messy from the first second.
+- Fixed: a tomato close to the camera filled the whole screen.
+
 ## v0.3.0 — 2026-11-26 — Lunchroom Food Fight
 
 - Changed: Stormring is now a kid-friendly food fight in a giant 80s school lunchroom. No guns: you throw tomatoes that fly in an arc and splat.

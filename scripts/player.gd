@@ -97,12 +97,18 @@ func _ask_wipe() -> void:
 
 
 ## When you are splatted: hide your kid and stop moving. The camera stays.
-func _on_out() -> void:
+func _on_out(by: Fighter) -> void:
 	$Body.visible = false
 	$Shape.set_deferred("disabled", true)
 	wipe_left = 0.0
 	set_physics_process(false)
 	set_process_unhandled_input(false)
+	# Turn the camera to the buddy who got you, so you see who it was.
+	if by and by != self:
+		var to := by.global_position - global_position
+		var yaw := atan2(-to.x, -to.z)
+		cam_yaw.create_tween().tween_property(cam_yaw, "rotation:y",
+				cam_yaw.rotation.y + wrapf(yaw - cam_yaw.rotation.y, -PI, PI), 0.6)
 
 
 ## A lunch box calls this when you open it.
@@ -114,6 +120,8 @@ func give_loot() -> void:
 	else:
 		tomatoes = Tune.tomato_bag # A lunch box also fills your hands.
 	napkins = mini(napkins + 1, Tune.max_napkins)
+	Sfx.play_here("pickup")
+	get_tree().current_scene.pop_text(global_position + Vector3(0, 2.6, 0), "+%d tomatoes  +1 napkin" % Tune.tomato_bag, Color(1, 0.945, 0.839))
 
 
 ## Throw one tomato at the spot under the crosshair.
@@ -166,6 +174,7 @@ func _swing_spoon() -> void:
 	if hit.collider.get_parent().is_in_group("harvest"):
 		trays = mini(trays + Tune.trays_per_hit, Tune.max_trays)
 		Sfx.play_for_everyone("harvest", hit.position)
+		get_tree().current_scene.pop_text(hit.position + Vector3(0, 0.5, 0), "+%d tray" % Tune.trays_per_hit, Color(0.957, 0.769, 0.188))
 
 
 ## Put the ghost wall on the 4 m grid, on the edge of your square that you face.

@@ -60,8 +60,15 @@ func _ready() -> void:
 
 
 ## The top of lunch table number `i`: everyone starts on a different table.
+## Only tables well inside the jello circle count, so nobody starts in the jello.
 func _table_spot(i: int) -> Vector3:
 	var tables := get_tree().get_nodes_in_group("table")
+	var storm := get_tree().get_first_node_in_group("storm")
+	if storm:
+		var safe := tables.filter(func(t: Node3D) -> bool:
+			return storm.is_safe(t.global_position) and Vector2(t.global_position.x, t.global_position.z).distance_to(storm.center) < storm.radius - 15.0)
+		if safe.size() >= 4:
+			tables = safe
 	return tables[i % tables.size()].global_position + TABLE_TOP
 
 
@@ -134,14 +141,40 @@ func _process(delta: float) -> void:
 		restart_wait -= delta
 
 
-## Someone is splatted: check if the match is over.
-func _on_eliminated(who: Fighter, _by: Fighter) -> void:
+## Words that float up from a spot and fade, like "+1 tray". Only on this screen.
+func pop_text(where: Vector3, text: String, color: Color) -> void:
+	var label := Label3D.new()
+	label.text = text
+	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	label.no_depth_test = true # Seen through tables, so you never miss it.
+	label.font_size = 64
+	label.pixel_size = 0.006
+	label.modulate = color
+	label.outline_modulate = Color(0.149, 0.275, 0.325)
+	label.outline_size = 14
+	add_child(label)
+	label.global_position = where
+	var tween := label.create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(label, "global_position", where + Vector3(0, 1.5, 0), 1.0)
+	tween.tween_property(label, "modulate:a", 0.0, 1.0).set_delay(0.4)
+	tween.chain().tween_callback(label.queue_free)
+
+
+## Someone is splatted: tell the splat feed, then check if the match is over.
+func _on_eliminated(who: Fighter, by: Fighter) -> void:
 	var me := _me()
+	if by and by != who:
+		hud.feed("%s splatted %s" % [by.nice_name(), who.nice_name().to_lower() if who == me else who.nice_name()], by == me or who == me)
+	else:
+		hud.feed("%s got jello'd" % ("You" if who == me else who.nice_name()), who == me)
+	Sfx.play_here("out")
 	if game_over or me == null:
 		return
 	var left := get_tree().get_nodes_in_group("fighter").size()
 	if who == me:
-		_end("Splatted!", "Place #%d" % (left + 1))
+		var title := "Splatted by %s!" % by.nice_name() if by and by != who else "Jello'd!"
+		_end(title, "Place #%d" % (left + 1))
 	elif left == 1 and not me.is_out:
 		_end("Last one clean!", "Place #1")
 

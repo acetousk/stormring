@@ -45,6 +45,8 @@ extends Node
 @export var bot_throw_every: float = 0.8 ## Seconds between bot throws (higher = easier bots)
 @export var bot_miss_far: float = 3.0 ## How far off a bot aims at the edge of sight, in meters
 @export var bot_miss_near: float = 0.6 ## How far off a bot aims up close, in meters
+@export var bot_napkins: int = 1 ## Napkins each bot starts with
+@export var bot_wipe_below: float = 40.0 ## A bot uses a napkin when it is less clean than this
 
 @export_group("Jello spill")
 @export var storm_start_radius: float = 80.0 ## Size of the safe circle at the start, in meters

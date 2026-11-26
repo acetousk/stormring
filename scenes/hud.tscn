@@ -66,7 +66,7 @@ mouse_filter = 2
 
 [node name="Caption" type="Label" parent="Grade/Row/Col"]
 layout_mode = 2
-text = "Clean"
+text = "Clean (0% = out)"
 label_settings = SubResource("caption")
 
 [node name="HP" type="Label" parent="Grade/Row/Col"]

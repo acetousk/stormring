@@ -17,3 +17,4 @@
 | 2026-11-25 | 0.0.1 | Kid | full match after G6 (sound + touch): "ok", no fix named | — | — | keep |
 | 2026-11-26 | 0.3.0 | Maintainer | "no guns, a kid-friendly food fight" | Renamed: `pickaxe_swing_every` → `spoon_swing_every` (0.3 kept); `bot_accuracy_*` → `bot_miss_far` 3 m / `bot_miss_near` 0.6 m (tomatoes now really fly, so bots miss by meters, not by chance); new `throw_*`, `tomato_*`, `towel_*` | — | test |
 | 2026-11-26 | 0.3.0 | Maintainer | "a lunchroom food fight, all small kindergartners" | Start on a table, no sky drop (`drop_height` removed); new `napkin_open_speed` 7.5; `glide_fall` 8 → 3; `crumbs_*` → `trays_*`, `towel_*` → `napkin_*` | — | test |
+| 2026-11-26 | 0.3.0+ | Robot playtest | before: 2 hits on bots per match, place #3 at 1:37 | Hit marker + sound, bots fight back at who hit them (the robot's own aim was also fixed); new `bot_napkins` 1, `bot_wipe_below` 40 | after: 14–15 hits on bots per match; place #1–#3 at 1:39–2:05 | test |
