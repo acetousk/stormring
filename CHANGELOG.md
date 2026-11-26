@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2.4 — 2026-11-26
+
+- Fixed: the web version goes live (the web page was not set up yet).
+
 ## v0.2.3 — 2026-11-26
 
 - Added: a FAQ page and forms to report a bug, an idea, or a question.
