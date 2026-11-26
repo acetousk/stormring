@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.2.3 — 2026-11-26
+
+- Added: a FAQ page and forms to report a bug, an idea, or a question.
+- Fixed: the web and PC versions now come out even when the Android version can't be built.
+
 ## v0.2.2 — 2026-11-25
 
 - Fixed: local-mode tests (2 windows) filled Output with "Key must not be empty". Player, bot, and storm syncs now send the sure way in local mode.
