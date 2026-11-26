@@ -45,7 +45,7 @@ Budget: about 75 minutes of your work, about 65 steps.
 | G4 Pressure | 10 min | One threat → its cost + a short safe time → display → lose → a 2nd threat or more speed → tune |
 | G5 Online | 15 min | The kid installs GD-Sync → `scripts/net.gd` in local mode → host or join a room by a 4-digit code → sync the players → the host runs the game state → a 2-instance test. In solo, show no network text. Then the `online` skill for keys (needed by v0.1.0, so friends can join). |
 | G6 Flow + sound + touch | 12 min | Start screen ("Click or tap to start") → end screen → play again 3 times → touch controls → sounds (`create-audio`) → the kid plays a full game and names one fix |
-| G7 Ship | 8 min | Title + icon → the fix → use the `ship` skill for `v0.1.0` |
+| G7 Ship | 8 min | Title + icon → the fix → the GitHub settings check (section 4) → use the `ship` skill for `v0.1.0` |
 
 Art: use `create-2d` or `create-3d`, `create-background`, and `create-environment` inside the cards. Keep each asset to 1 step.
 
@@ -56,6 +56,11 @@ Some steps need the kid's hands in Godot. Say exactly where to click. Then stop 
 - G5: AssetLib → search "GD-Sync" → Download → Install → Project → Project Settings → Plugins → GD-Sync → On.
 - 2-instance test: Debug → Customize Run Instances → Enable Multiple Instances → 2 → F5.
 - After your edits, Godot may ask "Reload from disk?". Tell the kid once: click **Reload**.
+- G7, before the first ship: the GitHub settings check. Without it the first release fails: no web page, and no Android build. Ask: "Has a parent done the 3 GitHub settings for this game?" Not sure → give the parent these clicks, one at a time, and wait for `done` after each:
+  1. The game's GitHub page → **Settings → Pages** → **Source**: **GitHub Actions**.
+  2. **Settings → Environments → github-pages → Deployment branches and tags** → **Add deployment branch or tag rule** → type **Tag**, pattern `v*`. (No `github-pages` environment yet? Step 1 makes it. Reload the page.)
+  3. **Settings → Secrets and variables → Actions** → **New repository secret**, 3 times: `ANDROID_KEYSTORE_B64`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`. The values come from the parent's keystore (`1-setup.md`, part C, "Android signing"). Never ask for or see the values.
+  The GD-Sync secrets come later, in the `online` skill. Each setting is a one-time job for each game repo.
 
 ## 5. After v0.1.0
 Ask what the kid wants next. Use `feature`, `bug`, or `game-plan` section 5 (tune).

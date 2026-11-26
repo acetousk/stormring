@@ -41,6 +41,8 @@ Run checks 1–3 with no `timeout`, `cd`, or `&&` around them, so they need no a
 | 11 | No key yet | Kid | The `online` skill |
 | 12 | The folder is not trusted, so Claude Code ignores the allow list and asks for everything | Kid | Close Claude Code. Open it again in the game folder. Click **Yes, I trust this folder**. |
 | GD-Sync login loops, or the robot check fails | A test or embedded browser | Kid | Log in with a normal browser (Chrome, Firefox, Edge) |
+| The release has no web page, or the Pages job fails | Pages is not set to GitHub Actions, or `github-pages` has no `v*` tag rule | Parent | `new-game` section 4, G7 steps 1–2. Then `ship` again. |
+| The Android build fails, or phones cannot update | The 3 `ANDROID_*` secrets are missing or changed | Parent | `new-game` section 4, G7 step 3. Then `ship` again. |
 | Released builds can't host or join, Godot can | No GitHub secrets, or they came after the build | Kid | The `online` skill, step 5, then `ship` |
 | The Android emulator shows no video (Linux only) | The x264 codec is missing | Parent | Install `x264-libs` (Fedora: RPM Fusion free) |
 
