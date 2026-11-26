@@ -28,6 +28,7 @@ The questions are not a test you can fail. They make sure that **you** understan
 | "a sky", "the background is boring", "make it night" | `create-background` | 2D: layers that move at different speeds. 3D: sky, sun, light. | Answer the quiz, approve. Check that you can still see the player |
 | "make a level", "a bigger map", "random dungeons" | `create-environment` | Claude draws a text map first, then builds it after you say yes | Answer the quiz, approve the map, then run to each corner |
 | "play with friends", "online", "rooms", "the code doesn't work" | `online` | Claude teaches how rooms work, then guides you to make your GD-Sync keys and put them in Godot and GitHub. Then you ship and test a room with a friend. | Answer the quiz. Click where Claude says. Paste keys only in Godot and GitHub, never in the chat. |
+| "check issues", "what did my friends say", "issue #12" | `issues` | Claude reads what friends reported on your game's GitHub page and sorts it into bugs, ideas, and questions. You pick one. The fix closes the report at the next ship. | Pick which one first, and say why. Paste Claude's thank-you reply on GitHub. |
 | "how does X work?", "explain …", "why does …" | `explain` | Claude reads the real code and explains how it works, step by step, with real numbers from your game. Then it asks you one question. | Answer the question. Say "more" to go one level deeper. |
 | "make a skill", "every time I say X, do Y" | `create-skill` | Claude makes **your own** skill with your keyword | Answer the quiz about your skill, approve, then test it |
 | "too hard", "boring", "feels slow" | (tune loop) | Claude asks which number you think causes it, then changes one number. You play a full run. | Say **keep** or **undo** |
@@ -42,6 +43,12 @@ The questions are not a test you can fail. They make sure that **you** understan
 | `idea: …` | Saves it in "Not in v1.0". It does not do it now. |
 | `?` or `why?` | Explains. It does no more steps until you get it. |
 | `undo` | Press **Esc** twice in Claude Code and pick the step to go back to |
+
+## Docs for your players
+Your game has 2 pages for players: `README.md` (how to play, controls, play links) and `FAQ.md` (questions and known problems).
+After a feature or a fix, Claude asks you: "A friend asks … What do you answer?" Your answer goes in the docs. Nothing ships until the docs match the game.
+
+Friends report bugs and ideas on your game's GitHub page: **Issues → New issue**. Share this link: `https://github.com/<you>/<your-game>/issues/new/choose`.
 
 ## Pop-ups
 - **Allow** for `git tag` or `git push` during `ship`: this sends your game to GitHub. Click Allow.

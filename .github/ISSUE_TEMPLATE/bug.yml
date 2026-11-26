@@ -1,0 +1,35 @@
+name: Something is broken
+description: The game crashed, froze, or did something wrong.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping! **Do not write your real name, age, school, or where you live.** Everyone can read this page.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      placeholder: When I picked up the rifle in the storm, the game froze.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: How can we make it happen again?
+      placeholder: |
+        1. Host a room
+        2. Glide into the storm
+        3. Pick up the rifle
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Where did you play?
+      options: [Web browser, Android phone, Windows PC, Linux PC]
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version (on the start screen or the release name)
+      placeholder: v0.2.2

@@ -45,7 +45,7 @@ Budget: about 75 minutes of your work, about 65 steps.
 | G4 Pressure | 10 min | One threat → its cost + a short safe time → display → lose → a 2nd threat or more speed → tune |
 | G5 Online | 15 min | The kid installs GD-Sync → `scripts/net.gd` in local mode → host or join a room by a 4-digit code → sync the players → the host runs the game state → a 2-instance test. In solo, show no network text. Then the `online` skill for keys (needed by v0.1.0, so friends can join). |
 | G6 Flow + sound + touch | 12 min | Start screen ("Click or tap to start") → end screen → play again 3 times → touch controls → sounds (`create-audio`) → the kid plays a full game and names one fix |
-| G7 Ship | 8 min | Title + icon → the fix → the GitHub settings check (section 4) → use the `ship` skill for `v0.1.0` |
+| G7 Ship | 8 min | Title + icon → the fix → `README.md` (play links, how to play, controls, "Report a bug or idea: `https://github.com/<owner>/<repo>/issues/new/choose`") and `FAQ.md` (3 questions, the kid answers each) → the GitHub settings check (section 4) → use the `ship` skill for `v0.1.0` |
 
 Art: use `create-2d` or `create-3d`, `create-background`, and `create-environment` inside the cards. Keep each asset to 1 step.
 

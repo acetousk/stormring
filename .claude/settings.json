@@ -17,7 +17,8 @@
       "Bash(python3 --version)",
       "Bash(py --version)",
       "Bash(git worktree add .godot/last:*)",
-      "Bash(git worktree remove --force .godot/last)"
+      "Bash(git worktree remove --force .godot/last)",
+      "WebFetch(domain:api.github.com)"
     ],
     "ask": [
       "Bash(git push:*)",
@@ -39,6 +40,7 @@
       "Edit(.claude/skills/explain/**)",
       "Edit(.claude/skills/feature/**)",
       "Edit(.claude/skills/game-plan/**)",
+      "Edit(.claude/skills/issues/**)",
       "Edit(.claude/skills/new-game/**)",
       "Edit(.claude/skills/online/**)",
       "Edit(.claude/skills/ship/**)",

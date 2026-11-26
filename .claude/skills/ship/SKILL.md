@@ -14,6 +14,7 @@ You do every git step. The kid only says "go" and clicks **Allow** on each pop-u
    - It passes there → the new change broke it. Use `bug`. Stop.
    - It fails there too → this computer blocks the test, not the change. Tell the kid in 1 line, in game words. Use the kid's own 2-window play test instead, and go on.
 4. A step the kid has not played yet? Ask for one ▶ Play round first.
+4b. Docs match? Each `Added:` line that changes controls or rules is in `README.md`. Each `Fixed:` line that players may meet is in `FAQ.md`. Missing → do `feature` step 5.3 or `bug` step 5 first.
 5. **Quiz: does the kid know what ships?** Read `CHANGELOG.md` since the last tag. Do not read the list to the kid. Ask, one at a time:
    - "What is new in this version? Say it in your own words."
    - "Pick one change. How does it work?"
@@ -36,7 +37,7 @@ Say, in 3 lines:
 
 After `go`:
 1. `git add` the changed files by name. Never `git add -A`. Never add secrets (`keys.cfg`, `*.keystore`).
-2. `git commit -m "v1.2.1: <one line>"`
+2. `git commit -m "v1.2.1: <one line>"`. Lines in this version with `(#N)`? Add one more `-m "Fixes #N"` for each, so GitHub closes those issues. Nothing left to commit (save points have it all)? Use `git commit --allow-empty` with the same messages.
 3. `git tag v1.2.1 -m "v1.2.1"` (exactly this form, so the pop-up matches)
 4. `git push`, then `git push origin v1.2.1`
 

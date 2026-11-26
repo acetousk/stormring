@@ -33,5 +33,6 @@ One step, the checks, then `How:` and `▶ Play:`. Act on the kid's answer as in
 
 ## 5. Done
 1. Check "Done when" in play. Online feature: the 2-instance test.
-2. Tick the card. Add `Added: <what the kid can do>` to `CHANGELOG.md`.
-3. Ask: "Ship it now?" Yes → `ship`.
+2. Tick the card. Add `Added: <what the kid can do>` to `CHANGELOG.md`. From an issue? End the line with `(#N)`.
+3. **Docs for players.** Does the feature change the controls, the rules, or how to play? Ask the kid: "A friend asks: how do I <use it>? What do you answer?" Wrong or unclear → a hint, never the answer. Write the kid's answer, tidied, in `README.md` (How to play, Controls) and, if friends may ask about it, as a question in `FAQ.md`.
+4. Ask: "Ship it now?" Yes → `ship`.

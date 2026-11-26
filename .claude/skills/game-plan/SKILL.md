@@ -19,6 +19,7 @@ Sort it, then go on:
 | Setup or build trouble | `doctor` skill |
 | A new game, or no `DESIGN.md` | `new-game` skill |
 | A bug | `bug` skill |
+| Friends' reports, "check issues", "issue #N" | `issues` skill |
 | A new feature or change | `feature` skill |
 | Art, sound, a background, or a level | `create-2d`, `create-3d`, `create-audio`, `create-background`, `create-environment` |
 | Ship, release, publish | `ship` skill |

@@ -43,6 +43,11 @@ Online rooms in the web, phone, and PC builds need this repo's GD-Sync keys (the
 Online play uses [GD-Sync](https://www.gd-sync.com/). In v0.2.0 the downloaded builds don't have an online key yet, so
 **Host and Join only work when you run the game from the Godot editor** (same computer or Wi-Fi). Solo works everywhere.
 
+## Help and feedback
+
+- Questions and known problems: [FAQ.md](FAQ.md).
+- Found a bug, or have an idea? [Report it here](https://github.com/acetousk/stormring/issues/new/choose). Do not write your real name, age, school, or where you live.
+
 ## For the developer
 
 - Open the folder in Godot 4.7.2 and press F5.
