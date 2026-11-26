@@ -62,6 +62,13 @@ size = Vector3(0.42, 0.46, 0.2)
 material = ExtResource("3_crust")
 size = Vector3(0.44, 0.16, 0.22)
 
+[sub_resource type="CapsuleMesh" id="arm"]
+material = ExtResource("5_sand")
+radius = 0.09
+height = 0.6
+radial_segments = 8
+rings = 2
+
 [node name="Kid" type="Node3D"]
 
 [node name="Legs" type="MeshInstance3D" parent="."]
@@ -92,7 +99,7 @@ mesh = SubResource("m5")
 
 [node name="Hand" type="MeshInstance3D" parent="."]
 visibility_range_end = 40.0
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0.95, -0.15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.48, 0.74, -0.02)
 mesh = SubResource("m6")
 
 [node name="Backpack" type="MeshInstance3D" parent="."]
@@ -103,3 +110,11 @@ mesh = SubResource("m7")
 visibility_range_end = 40.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22, 0.41)
 mesh = SubResource("m8")
+
+[node name="ArmL" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.985, 0.174, 0, -0.174, 0.985, 0, 0, 0, 1, -0.42, 1.05, 0)
+mesh = SubResource("arm")
+
+[node name="ArmR" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.985, -0.174, 0, 0.174, 0.985, 0, 0, 0, 1, 0.42, 1.05, 0)
+mesh = SubResource("arm")

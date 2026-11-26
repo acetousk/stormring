@@ -39,6 +39,30 @@ Explain how it will work with a game the kid knows. Do not give the plan yet.
 ## 4. Build
 One step, the checks, then `How:` and `▶ Play:`. Act on the kid's answer as in `game-plan` 3.7.
 
+### 4a. Game feel check
+A player must see and hear what happens. Use this list when you write the plan (section 3): each line that fits the feature becomes part of a step. Check it again before `▶ Play:`. A line is still missing? Show a new plan first, as for any change not in the approved plan.
+- **Every action answers 3 ways:** a sound, a thing at that spot (a splat, a spark, floating words like "+1 tray"), and a change on the HUD.
+- **Hits you make:** a marker on the crosshair and a sound. The player must know the hit landed.
+- **Hits you take:** a mark on the screen edge on the side it came from, and a sound.
+- **Danger:** say what it is, which way is safe, and how far (an arrow and meters).
+- **First time:** a one-line tip at the top until the player does it once. Touch screens get touch words ("Tap THROW").
+- **Who is who:** bots and players have names and look different (another colour each). Then a line like "Max splatted Rosa" makes sense.
+- **Enemies react:** a hit enemy turns to the one who hit it.
+- **Fair start:** the player starts in a safe place, never in danger from second 0.
+- **Words agree:** the title, grade, and stats on one screen do not say opposite things (a win with an "F" reads wrong).
+
+### 4b. Robot playtest (a change in how the game plays)
+Test it with a robot player before the kid plays. The kid never runs it; you do.
+1. No `tools/autoplay.gd` yet? Make it as its own step in the plan, once (`extends SceneTree`, called with `-s`). It:
+   - loads the main scene, and plays like a simple player: `Input.action_press` and `Input.action_release` on the Input Map actions to move, jump, fire, and heal. `action_press` makes no mouse motion, so aim by turning the camera nodes directly (for example the yaw and pitch pivots) toward the nearest enemy.
+   - prints one `PLAY` line every 2 seconds: time, what it is doing, the HUD numbers.
+   - saves a screenshot every few seconds, and the first time something new happens, to `res://.godot/autoplay/` (in the project, so you can read it, and git-ignored). Use `ProjectSettings.globalize_path` for the path.
+   - prints a `PLAY_END` line (how it ended, the score) and quits after the seconds you give.
+2. Tell the kid: "A game window opens by itself for about 2 minutes. Do not click it." Then run it with a window, not `--headless` (screenshots need a screen): `godot --fixed-fps 30 -s res://tools/autoplay.gd -- 120`.
+3. Read every line, then look at the screenshots. Look for: words on top of words, numbers that disagree, a stuck player, a match that ends too fast or never ends, and errors.
+4. Balance change? Run it before and after. Put the numbers (time, score, place) in the "stats" column of `PLAYTEST.md`.
+5. The robot finds bugs, not fun. Only the kid says if it is fun.
+
 ## 5. Done
 1. Check "Done when" in play. Online feature: the 2-instance test.
 2. Tick the card. Add `Added: <what the kid can do>` to `CHANGELOG.md`. From an issue? End the line with `(#N)`.

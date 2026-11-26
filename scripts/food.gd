@@ -13,6 +13,44 @@ var thrower: Node3D = null
 ## True on the thrower's screen: this copy makes people less clean.
 var real := false
 var age := 0.0
+## A see-through swoosh behind the tomato, so you can follow where it flies.
+var trail: MeshInstance3D
+
+const TRAIL_LENGTH := 1.6 ## Meters of swoosh behind a flying tomato
+const HIDE_NEAR_CAMERA := 3.0 ## Meters: closer to your camera than this, the tomato is hidden (so it never fills the screen)
+
+
+func _ready() -> void:
+	var mesh := CylinderMesh.new()
+	mesh.top_radius = 0.16 # The end next to the tomato is fat...
+	mesh.bottom_radius = 0.01 # ...and the tail is thin.
+	mesh.height = TRAIL_LENGTH
+	mesh.radial_segments = 6
+	mesh.rings = 1
+	var mat := StandardMaterial3D.new()
+	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	mat.albedo_color = Color(1.0, 0.945, 0.839, 0.35) # Cream, see-through
+	mesh.material = mat
+	trail = MeshInstance3D.new()
+	trail.mesh = mesh
+	trail.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	trail.top_level = true # It points along the flight, not along the spinning tomato.
+	add_child(trail)
+
+
+func _process(_delta: float) -> void:
+	# Lay the swoosh along the flight, behind the tomato.
+	if velocity.length() > 0.1:
+		var back := -velocity.normalized()
+		trail.global_position = global_position + back * TRAIL_LENGTH / 2.0
+		var side := back.cross(Vector3.UP)
+		if side.length() < 0.01:
+			side = Vector3.RIGHT
+		trail.global_basis = Basis(side.normalized(), -back, side.cross(-back).normalized())
+	# Too close to your camera (like when you throw from under a table)? Hide it.
+	var cam := get_viewport().get_camera_3d()
+	visible = cam == null or cam.global_position.distance_to(global_position) > HIDE_NEAR_CAMERA
 
 
 func _physics_process(delta: float) -> void:
@@ -39,10 +77,23 @@ func _physics_process(delta: float) -> void:
 
 
 func _splat(hit: Dictionary) -> void:
+	# It hit YOU (on your screen): the HUD puts the mess on the side it came from.
+	# First, so the HUD knows it was a tomato when your clean goes down.
+	if hit.collider is Fighter and hit.collider.is_in_group("player"):
+		var hud := get_tree().current_scene.get_node_or_null("HUD")
+		if hud:
+			hud.hit_from(global_position - velocity)
 	if real:
-		var by: Fighter = thrower if thrower is Fighter else null
+		# The thrower can be gone by now (splatted while the tomato flew).
+		var by: Fighter = thrower if is_instance_valid(thrower) and thrower is Fighter else null
 		if hit.collider is Fighter:
 			hit.collider.hurt(Tune.tomato_splat, by)
+			# Your own tomato hit someone: show it on your HUD and play a "ding".
+			if by and by.is_in_group("player"):
+				var hud := get_tree().current_scene.get_node_or_null("HUD")
+				if hud:
+					hud.hit_marker()
+				Sfx.play_here("hit")
 		elif hit.collider.has_method("take_damage"):
 			hit.collider.take_damage(Tune.tomato_splat, by) # Tray walls soak it up
 	# Every screen shows the splat and plays the sound for its own copy.

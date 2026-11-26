@@ -7,6 +7,7 @@
     "allow": [
       "Bash(godot --version)",
       "Bash(godot --headless:*)",
+      "Bash(godot --fixed-fps 30 -s res://tools/autoplay.gd:*)",
       "Bash(git status)",
       "Bash(git remote -v)",
       "Bash(git diff:*)",

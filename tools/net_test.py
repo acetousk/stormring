@@ -136,6 +136,9 @@ def main():
             print("The joiner never found the room. Last joiner lines:")
             for l in join_lines[-5:]:
                 print("   ", l)
+            print("Local mode finds rooms with a UDP broadcast on this computer (ports 42354-42373).")
+            print("Both copies must share one network: a firewall that blocks it, or a `godot`")
+            print("that runs each copy in its own box with no network, stops the joiner.")
     sys.exit(1 if bad else 0)
 
 
