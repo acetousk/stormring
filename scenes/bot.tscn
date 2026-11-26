@@ -1,0 +1,57 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/bot.gd" id="1_bot"]
+[ext_resource type="Script" path="res://addons/GD-Sync/Scripts/Types/PropertySynchronizer.gd" id="2_sync"]
+
+[sub_resource type="StandardMaterial3D" id="body_mat"]
+albedo_color = Color(0.165, 0.616, 0.561, 1)
+
+[sub_resource type="CapsuleMesh" id="body_mesh"]
+material = SubResource("body_mat")
+radius = 0.4
+height = 1.8
+
+[sub_resource type="BoxMesh" id="eye_mesh"]
+material = SubResource("body_mat")
+size = Vector3(0.5, 0.15, 0.3)
+
+[sub_resource type="CapsuleShape3D" id="body_shape"]
+radius = 0.4
+height = 1.8
+
+[node name="Bot" type="CharacterBody3D"]
+collision_mask = 3
+script = ExtResource("1_bot")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+mesh = SubResource("body_mesh")
+
+[node name="Visor" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.45, -0.35)
+mesh = SubResource("eye_mesh")
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("body_shape")
+
+[node name="MoveSync" type="Node" parent="."]
+script = ExtResource("2_sync")
+process = 1
+refresh_rate = 20
+node_path = NodePath("..")
+properties = PackedStringArray("position", "rotation:y")
+interpolated = true
+interpolation_speed = 20.0
+
+[node name="HpSync" type="Node" parent="."]
+script = ExtResource("2_sync")
+refresh_rate = 10
+node_path = NodePath("..")
+reliable = true
+properties = PackedStringArray("hp")
+
+[node name="Agent" type="NavigationAgent3D" parent="."]
+path_desired_distance = 1.0
+target_desired_distance = 1.5
+radius = 0.5

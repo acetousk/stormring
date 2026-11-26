@@ -1,0 +1,101 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/lobby.gd" id="1_lobby"]
+
+[sub_resource type="LabelSettings" id="big"]
+font_size = 96
+font_color = Color(0.914, 0.769, 0.416, 1)
+outline_size = 16
+outline_color = Color(0.482, 0.173, 0.749, 1)
+
+[sub_resource type="LabelSettings" id="text"]
+font_size = 32
+font_color = Color(0.914, 0.769, 0.416, 1)
+outline_size = 8
+outline_color = Color(0.149, 0.275, 0.325, 1)
+
+[node name="Lobby" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lobby")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.149, 0.275, 0.325, 1)
+
+[node name="Box" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -300.0
+offset_right = 300.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Title" type="Label" parent="Box"]
+layout_mode = 2
+text = "Stormring"
+label_settings = SubResource("big")
+horizontal_alignment = 1
+
+[node name="Status" type="Label" parent="Box"]
+layout_mode = 2
+text = "Connecting…"
+label_settings = SubResource("text")
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Start" type="Button" parent="Box"]
+visible = false
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "Start match"
+
+[node name="Host" type="Button" parent="Box"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "Host a room"
+
+[node name="JoinRow" type="HBoxContainer" parent="Box"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Code" type="LineEdit" parent="Box/JoinRow"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+placeholder_text = "Room code"
+alignment = 1
+max_length = 4
+virtual_keyboard_type = 2
+
+[node name="Join" type="Button" parent="Box/JoinRow"]
+custom_minimum_size = Vector2(200, 72)
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "Join"
+
+[node name="Solo" type="Button" parent="Box"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "Play solo"

@@ -1,0 +1,159 @@
+extends Fighter
+## A bot: a capsule with a small brain.
+## STORM = outside the circle, run to the middle (this comes first).
+## ROAM = walk to random spots in the circle. FIGHT = sees someone, strafes and shoots.
+
+enum Mode { ROAM, FIGHT, STORM }
+
+const EYE := Vector3(0, 1.5, 0)
+
+var mode := Mode.ROAM
+var target: Node3D = null
+var ammo := 0
+var fire_cooldown := 0.0
+var reloading := false
+var look_timer := 0.0
+var strafe_dir := 1.0
+var strafe_timer := 0.0
+
+@onready var agent: NavigationAgent3D = $Agent
+
+
+func _ready() -> void:
+	add_to_group("bot")
+	add_to_group("fighter")
+	ammo = Tune.rifle_mag
+	_net_ready()
+	# Wait one frame so the island map is ready, then pick a place to walk to.
+	await get_tree().physics_frame
+	_pick_roam_point()
+
+
+## Choose a random spot inside the safe circle and ask the map for a path there.
+func _pick_roam_point() -> void:
+	var middle := Vector2.ZERO
+	var size := 70.0
+	var storm := get_tree().get_first_node_in_group("storm")
+	if storm:
+		middle = storm.center
+		size = storm.radius * 0.8
+	var spot := middle + Vector2.from_angle(randf() * TAU) * sqrt(randf()) * size
+	agent.target_position = Vector3(clampf(spot.x, -70, 70), 0.2, clampf(spot.y, -70, 70))
+
+
+## True if nothing solid is between my eyes and theirs.
+func _can_see(other: Node3D) -> bool:
+	var query := PhysicsRayQueryParameters3D.create(global_position + EYE, other.global_position + EYE, 1, [get_rid()])
+	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+	return not hit.is_empty() and hit.collider == other
+
+
+## Find the closest player or bot I can see within sight range.
+func _look_for_target() -> void:
+	target = null
+	var best := Tune.bot_sight
+	for other in get_tree().get_nodes_in_group("fighter"):
+		if other == self:
+			continue
+		var dist := global_position.distance_to(other.global_position)
+		if dist < best and _can_see(other):
+			best = dist
+			target = other
+	mode = Mode.FIGHT if target else Mode.ROAM
+	# The storm comes first: if I am outside, run to the middle.
+	var storm := get_tree().get_first_node_in_group("storm")
+	if storm and not storm.is_safe(global_position):
+		mode = Mode.STORM
+		agent.target_position = Vector3(storm.center.x, 0.2, storm.center.y)
+
+
+func _physics_process(delta: float) -> void:
+	# Online: only the host runs the bot brain. Other screens copy where it is.
+	if not Net.is_host():
+		return
+	if not is_on_floor():
+		velocity.y -= Tune.gravity * delta
+
+	# Look around a few times a second (not every frame, to save power).
+	look_timer -= delta
+	if look_timer <= 0.0:
+		look_timer = 0.2
+		_look_for_target()
+
+	if mode == Mode.STORM:
+		_follow_path()
+	elif mode == Mode.FIGHT and is_instance_valid(target):
+		_fight(delta)
+	else:
+		if agent.is_navigation_finished():
+			_pick_roam_point()
+		_follow_path()
+	move_and_slide()
+
+
+## Walk toward the next corner of the path.
+func _follow_path() -> void:
+	var direction := agent.get_next_path_position() - global_position
+	direction.y = 0.0
+	if direction.length() > 0.1:
+		direction = direction.normalized()
+		velocity.x = direction.x * Tune.bot_speed
+		velocity.z = direction.z * Tune.bot_speed
+		look_at(global_position + direction, Vector3.UP)
+	else:
+		velocity.x = 0.0
+		velocity.z = 0.0
+
+
+func _fight(delta: float) -> void:
+	# Face the target.
+	var to_target := target.global_position - global_position
+	to_target.y = 0.0
+	if to_target.length() > 0.1:
+		look_at(global_position + to_target, Vector3.UP)
+	# Strafe: step sideways, switch side every so often.
+	strafe_timer -= delta
+	if strafe_timer <= 0.0:
+		strafe_timer = randf_range(0.6, 1.4)
+		strafe_dir = -strafe_dir
+	var side := global_basis.x * strafe_dir * Tune.bot_speed * 0.6
+	velocity.x = side.x
+	velocity.z = side.z
+	# Shoot bursts, reload when empty.
+	fire_cooldown -= delta
+	if reloading:
+		return
+	if ammo <= 0:
+		_reload()
+	elif fire_cooldown <= 0.0:
+		_fire_burst()
+
+
+func _reload() -> void:
+	reloading = true
+	await get_tree().create_timer(Tune.rifle_reload_time).timeout
+	ammo = Tune.rifle_mag
+	reloading = false
+
+
+func _fire_burst() -> void:
+	fire_cooldown = Tune.rifle_fire_every
+	for i in Tune.rifle_burst_shots:
+		if ammo <= 0 or not is_instance_valid(target):
+			return
+		ammo -= 1
+		_shoot_bullet()
+		await get_tree().create_timer(Tune.rifle_burst_gap).timeout
+
+
+## One bot bullet. Close = better aim, far = worse aim.
+func _shoot_bullet() -> void:
+	Sfx.play_for_everyone("shot", global_position) # Bots run on the host; everyone hears.
+	var dist := global_position.distance_to(target.global_position)
+	var closeness := 1.0 - clampf(dist / Tune.bot_sight, 0.0, 1.0)
+	var accuracy := lerpf(Tune.bot_accuracy_far, Tune.bot_accuracy_near, closeness)
+	if randf() > accuracy:
+		return
+	if _can_see(target):
+		if target is Fighter:
+			target.hurt(Tune.rifle_damage, self)

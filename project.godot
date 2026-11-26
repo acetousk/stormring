@@ -1,0 +1,134 @@
+; Engine configuration file.
+config_version=5
+
+[application]
+
+config/name="Stormring"
+config/version="0.2.2"
+run/main_scene="res://scenes/lobby.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[autoload]
+
+GDSync="*res://addons/GD-Sync/MultiplayerClient.gd"
+Tune="*res://scripts/tune.gd"
+Net="*res://scripts/net.gd"
+Sfx="*res://scripts/sfx.gd"
+
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/GD-Sync/plugin.cfg")
+
+[display]
+
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[input]
+
+move_left={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"device":-1,"physical_keycode":65,"pressed":false,"echo":false,"script":null)
+, Object(InputEventJoypadMotion,"device":-1,"axis":0,"axis_value":-1.0,"script":null)
+]
+}
+move_right={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"device":-1,"physical_keycode":68,"pressed":false,"echo":false,"script":null)
+, Object(InputEventJoypadMotion,"device":-1,"axis":0,"axis_value":1.0,"script":null)
+]
+}
+move_forward={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"device":-1,"physical_keycode":87,"pressed":false,"echo":false,"script":null)
+, Object(InputEventJoypadMotion,"device":-1,"axis":1,"axis_value":-1.0,"script":null)
+]
+}
+move_back={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"device":-1,"physical_keycode":83,"pressed":false,"echo":false,"script":null)
+, Object(InputEventJoypadMotion,"device":-1,"axis":1,"axis_value":1.0,"script":null)
+]
+}
+look_left={
+"deadzone": 0.2,
+"events": [Object(InputEventJoypadMotion,"device":-1,"axis":2,"axis_value":-1.0,"script":null)
+]
+}
+look_right={
+"deadzone": 0.2,
+"events": [Object(InputEventJoypadMotion,"device":-1,"axis":2,"axis_value":1.0,"script":null)
+]
+}
+look_up={
+"deadzone": 0.2,
+"events": [Object(InputEventJoypadMotion,"device":-1,"axis":3,"axis_value":-1.0,"script":null)
+]
+}
+look_down={
+"deadzone": 0.2,
+"events": [Object(InputEventJoypadMotion,"device":-1,"axis":3,"axis_value":1.0,"script":null)
+]
+}
+jump={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"device":-1,"physical_keycode":32,"pressed":false,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"device":-1,"button_index":0,"pressed":true,"script":null)
+]
+}
+fire={
+"deadzone": 0.2,
+"events": [Object(InputEventMouseButton,"device":-1,"button_index":1,"pressed":true,"script":null)
+, Object(InputEventJoypadMotion,"device":-1,"axis":5,"axis_value":1.0,"script":null)
+]
+}
+action={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"device":-1,"physical_keycode":69,"pressed":false,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"device":-1,"button_index":2,"pressed":true,"script":null)
+]
+}
+reload={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"device":-1,"physical_keycode":82,"pressed":false,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"device":-1,"button_index":10,"pressed":true,"script":null)
+]
+}
+heal={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"device":-1,"physical_keycode":72,"pressed":false,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"device":-1,"button_index":1,"pressed":true,"script":null)
+]
+}
+build={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"device":-1,"physical_keycode":81,"pressed":false,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"device":-1,"button_index":3,"pressed":true,"script":null)
+]
+}
+slot_1={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"device":-1,"physical_keycode":49,"pressed":false,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"device":-1,"button_index":13,"pressed":true,"script":null)
+]
+}
+slot_2={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"device":-1,"physical_keycode":50,"pressed":false,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"device":-1,"button_index":14,"pressed":true,"script":null)
+]
+}
+aim={
+"deadzone": 0.2,
+"events": [Object(InputEventMouseButton,"device":-1,"button_index":2,"pressed":true,"script":null)
+, Object(InputEventJoypadMotion,"device":-1,"axis":4,"axis_value":1.0,"script":null)
+]
+}
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true

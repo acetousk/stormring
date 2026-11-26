@@ -1,0 +1,76 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
+[ext_resource type="Script" path="res://addons/GD-Sync/Scripts/Types/PropertySynchronizer.gd" id="2_sync"]
+
+[sub_resource type="StandardMaterial3D" id="body_mat"]
+albedo_color = Color(0.149, 0.275, 0.325, 1)
+
+[sub_resource type="CapsuleMesh" id="body_mesh"]
+material = SubResource("body_mat")
+radius = 0.4
+height = 1.8
+
+[sub_resource type="CapsuleShape3D" id="body_shape"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="ghost_mat"]
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.416, 0.6, 0.306, 0.45)
+
+[sub_resource type="BoxMesh" id="ghost_mesh"]
+material = SubResource("ghost_mat")
+size = Vector3(4, 4, 0.2)
+
+[node name="Player" type="CharacterBody3D"]
+collision_mask = 3
+script = ExtResource("1_player")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+mesh = SubResource("body_mesh")
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("body_shape")
+
+[node name="Ghost" type="MeshInstance3D" parent="."]
+top_level = true
+visible = false
+mesh = SubResource("ghost_mesh")
+cast_shadow = 0
+
+[node name="MoveSync" type="Node" parent="."]
+script = ExtResource("2_sync")
+broadcast = 2
+process = 1
+refresh_rate = 20
+node_path = NodePath("..")
+properties = PackedStringArray("position")
+interpolated = true
+interpolation_speed = 20.0
+
+[node name="HpSync" type="Node" parent="."]
+script = ExtResource("2_sync")
+refresh_rate = 10
+node_path = NodePath("..")
+reliable = true
+properties = PackedStringArray("hp", "heal_left")
+
+[node name="CamYaw" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+
+[node name="CamPitch" type="Node3D" parent="CamYaw"]
+
+[node name="SpringArm" type="SpringArm3D" parent="CamYaw/CamPitch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0, 0)
+spring_length = 3.5
+margin = 0.2
+
+[node name="Camera" type="Camera3D" parent="CamYaw/CamPitch/SpringArm"]
+current = true
+fov = 75.0
+far = 1000.0

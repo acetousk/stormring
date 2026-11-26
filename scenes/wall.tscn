@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/wall.gd" id="1_wall"]
+
+[sub_resource type="StandardMaterial3D" id="wall_mat"]
+albedo_color = Color(0.165, 0.616, 0.561, 1)
+
+[sub_resource type="BoxMesh" id="wall_mesh"]
+material = SubResource("wall_mat")
+size = Vector3(4, 4, 0.2)
+
+[sub_resource type="BoxShape3D" id="wall_shape"]
+size = Vector3(4, 4, 0.2)
+
+[node name="Wall" type="StaticBody3D"]
+script = ExtResource("1_wall")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("wall_mesh")
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+shape = SubResource("wall_shape")
