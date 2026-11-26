@@ -1,0 +1,56 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(godot --version)",
+      "Bash(godot --headless:*)",
+      "Bash(git status)",
+      "Bash(git remote -v)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git tag --sort:*)",
+      "Bash(python tools/*)",
+      "Bash(python3 tools/*)",
+      "Bash(py tools/*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git config --get:*)",
+      "Bash(python3 --version)",
+      "Bash(py --version)",
+      "Bash(git worktree add .godot/last:*)",
+      "Bash(git worktree remove --force .godot/last)",
+      "WebFetch(domain:api.github.com)"
+    ],
+    "ask": [
+      "Bash(git push:*)",
+      "Bash(git tag v:*)",
+      "Bash(git reset:*)",
+      "Bash(git checkout:*)"
+    ],
+    "deny": [
+      "Edit(.claude/settings.json)",
+      "Edit(.claude/settings.local.json)",
+      "Edit(.claude/skills/bug/**)",
+      "Edit(.claude/skills/create-2d/**)",
+      "Edit(.claude/skills/create-3d/**)",
+      "Edit(.claude/skills/create-audio/**)",
+      "Edit(.claude/skills/create-background/**)",
+      "Edit(.claude/skills/create-environment/**)",
+      "Edit(.claude/skills/create-skill/**)",
+      "Edit(.claude/skills/doctor/**)",
+      "Edit(.claude/skills/explain/**)",
+      "Edit(.claude/skills/feature/**)",
+      "Edit(.claude/skills/game-plan/**)",
+      "Edit(.claude/skills/issues/**)",
+      "Edit(.claude/skills/new-game/**)",
+      "Edit(.claude/skills/online/**)",
+      "Edit(.claude/skills/ship/**)",
+      "Edit(.github/**)",
+      "Edit(export_presets.cfg)",
+      "Read(**/*.keystore)",
+      "Read(**/*.b64)",
+      "Read(export_credentials.cfg)",
+      "Read(addons/GD-Sync/keys.cfg)"
+    ],
+    "defaultMode": "plan"
+  }
+}

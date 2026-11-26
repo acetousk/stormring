@@ -1,0 +1,19 @@
+name: An idea
+description: Something you want in the game.
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the idea! **Do not write your real name, age, school, or where you live.** Everyone can read this page.
+  - type: textarea
+    id: idea
+    attributes:
+      label: What is your idea?
+      placeholder: A dash, so I can get away from bots.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why would it make the game more fun?

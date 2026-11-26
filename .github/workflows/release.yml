@@ -1,0 +1,126 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+env:
+  GODOT_VERSION: "4.7.2"   # must match the editor exactly
+  GAME: stormring
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.7.2   # same version as GODOT_VERSION
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { preset: "Android",         id: android, file: "game.apk" }
+          - { preset: "Windows Desktop", id: windows, file: "my-game.exe" }
+          - { preset: "Linux",           id: linux,   file: "my-game.x86_64" }
+          - { preset: "Web",             id: web,     file: "index.html" }
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Read version from tag
+        run: |
+          V="${GITHUB_REF_NAME#v}"
+          IFS=. read -r MAJ MIN PAT <<< "$V"
+          echo "V=$V" >> "$GITHUB_ENV"
+          echo "CODE=$((MAJ*10000 + MIN*100 + PAT))" >> "$GITHUB_ENV"
+
+      - name: Stamp version into presets
+        run: |
+          sed -i "s/^version\/code=.*/version\/code=$CODE/" export_presets.cfg
+          sed -i "s/^version\/name=.*/version\/name=\"$V\"/" export_presets.cfg
+          sed -i "s/^application\/file_version=.*/application\/file_version=\"$V.0\"/" export_presets.cfg
+          sed -i "s/^application\/product_version=.*/application\/product_version=\"$V.0\"/" export_presets.cfg
+          sed -i "s/^config\/version=.*/config\/version=\"$V\"/" project.godot || true
+
+      - name: Set up Godot
+        run: |
+          mkdir -p ~/.config ~/.local/share/godot/export_templates
+          mv /root/.config/godot ~/.config/godot || true
+          mv "/root/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
+             "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+          command -v zip || (apt-get update && apt-get install -y zip)
+
+      - name: Android signing
+        if: matrix.id == 'android'
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_B64 }}" | base64 -d > "$RUNNER_TEMP/release.keystore"
+          {
+            echo "GODOT_ANDROID_KEYSTORE_RELEASE_PATH=$RUNNER_TEMP/release.keystore"
+            echo "GODOT_ANDROID_KEYSTORE_RELEASE_USER=${{ secrets.ANDROID_KEY_ALIAS }}"
+            echo "GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD=${{ secrets.ANDROID_KEY_PASSWORD }}"
+          } >> "$GITHUB_ENV"
+
+      - name: Import project
+        run: godot --headless --import || true
+
+      - name: Export ${{ matrix.preset }}
+        env:   # GD-Sync adds these keys to the build. No keys = no online play.
+          GDSYNC_PUBLIC_KEY: ${{ secrets.GDSYNC_PUBLIC_KEY }}
+          GDSYNC_PRIVATE_KEY: ${{ secrets.GDSYNC_PRIVATE_KEY }}
+        run: |
+          mkdir -p build dist
+          godot --headless --verbose --export-release "${{ matrix.preset }}" "build/${{ matrix.file }}"
+
+      - name: Package
+        run: |
+          case "${{ matrix.id }}" in
+            android) cp build/game.apk "dist/$GAME-$V.apk" ;;
+            windows) (cd build && zip -r "../dist/$GAME-$V-windows.zip" .) ;;
+            linux)   chmod +x build/*.x86_64
+                     tar -czf "dist/$GAME-$V-linux-x86_64.tar.gz" -C build . ;;
+            web)     cp -r build/. dist/ ;;
+          esac
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.id == 'web' && 'web' || format('release-{0}', matrix.id) }}
+          path: dist/
+
+  release:
+    needs: export
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: release-*
+          path: dist
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
+
+  pages:
+    needs: export
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: web
+          path: web
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+      - id: deploy
+        uses: actions/deploy-pages@v4
