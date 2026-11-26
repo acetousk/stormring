@@ -1,16 +1,26 @@
 class_name Fighter
 extends CharacterBody3D
-## Shared by the player and the bots: health, taking damage, and being out.
+## Shared by the player and the bots: the clean meter, getting splatted, and being out.
 
-## Someone is out. `by` is who did it (can be null).
+## Someone is splatted (out of the round). `by` is who did it (can be null).
 signal eliminated(who: Fighter, by: Fighter)
 
-## Your health. At 0 you are out.
-var hp := 100.0
-## How many others you knocked out this match.
+const TOMATO := Color(0.902, 0.224, 0.275) ## The shirt turns this color as you get messy
+
+## How clean you are. At 0 you are splatted. (The name "hp" is short for "health points".)
+## When it changes (here, or from the host by HpSync), the shirt color changes too.
+var hp := 100.0:
+	set(value):
+		hp = value
+		_show_mess()
+## How many others you splatted this match.
 var eliminations := 0
-## True once you are out.
+## True once you are splatted.
 var is_out := false
+
+## My own copy of the shirt color, so only my shirt turns red.
+var shirt_mat: StandardMaterial3D
+var shirt_color := Color.WHITE
 
 
 ## True once the host has said "you are out" (so it only says it once).
@@ -32,10 +42,24 @@ func _enter_tree() -> void:
 ## ("_ask_" requests go through Net.tell_host, so they need no allow.)
 func _net_ready() -> void:
 	Net.allow(_knocked_out, true)
+	# The shirt is the "Torso" part of the model.
+	var torso := get_node_or_null("Body/Torso") as MeshInstance3D
+	if torso:
+		shirt_mat = torso.get_active_material(0).duplicate()
+		shirt_color = shirt_mat.albedo_color
+		torso.material_override = shirt_mat
+	_show_mess()
 
 
-## Shooters call this. The host owns HP: other screens ask the host,
-## the host takes the HP away, and HpSync sends the new HP to everyone.
+## Clean = the shirt's own color. Messy = more tomato red.
+func _show_mess() -> void:
+	if shirt_mat:
+		var mess := 1.0 - clampf(hp / Tune.max_hp, 0.0, 1.0)
+		shirt_mat.albedo_color = shirt_color.lerp(TOMATO, mess * 0.85)
+
+
+## A tomato calls this when it splats on me. The host owns HP: other screens ask the host,
+## the host takes the clean away, and HpSync sends the new value to everyone.
 func hurt(amount: float, by: Fighter) -> void:
 	Net.tell_host(_ask_hurt, amount, str(by.get_path()) if by else "")
 
@@ -46,18 +70,18 @@ func _ask_hurt(amount: float, by_path: String) -> void:
 	take_damage(amount, by)
 
 
-## Runs on the host: take HP away. At 0 the host tells every screen you are out.
+## Runs on the host: make me less clean. At 0 the host tells every screen I am splatted.
 func take_damage(amount: float, by: Fighter) -> void:
 	if is_out or out_sent:
 		return
 	hp = maxf(hp - amount, 0.0)
-	print(name, " took ", amount, " from ", by.name if by else "?", " -> HP ", hp)
+	print(name, " took ", amount, " from ", by.name if by else "?", " -> clean ", hp)
 	if hp <= 0.0:
 		out_sent = true
 		Net.tell_everyone(_knocked_out, str(by.get_path()) if by else "")
 
 
-## Runs on every screen: you are out. Each screen then checks who won.
+## Runs on every screen: you are splatted. Each screen then checks who won.
 func _knocked_out(by_path: String) -> void:
 	if is_out:
 		return
@@ -71,6 +95,6 @@ func _knocked_out(by_path: String) -> void:
 	_on_out()
 
 
-## What happens when you are out. Bots and the player do this differently.
+## What happens when you are splatted. Bots and the player do this differently.
 func _on_out() -> void:
 	queue_free()

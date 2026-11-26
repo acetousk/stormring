@@ -1,0 +1,49 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/splat.gd" id="1_splat"]
+
+[sub_resource type="StandardMaterial3D" id="juice"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.902, 0.224, 0.275, 1)
+
+[sub_resource type="CylinderMesh" id="puddle_mesh"]
+material = SubResource("juice")
+top_radius = 0.6
+bottom_radius = 0.6
+height = 0.02
+radial_segments = 10
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="drop_mat"]
+shading_mode = 0
+albedo_color = Color(0.902, 0.224, 0.275, 1)
+
+[sub_resource type="SphereMesh" id="drop_mesh"]
+material = SubResource("drop_mat")
+radius = 0.07
+height = 0.14
+radial_segments = 6
+rings = 3
+
+[node name="Splat" type="Node3D"]
+script = ExtResource("1_splat")
+
+[node name="Puddle" type="MeshInstance3D" parent="."]
+mesh = SubResource("puddle_mesh")
+cast_shadow = 0
+
+[node name="Drops" type="CPUParticles3D" parent="."]
+emitting = false
+amount = 10
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+mesh = SubResource("drop_mesh")
+direction = Vector3(0, 1, 0)
+spread = 70.0
+initial_velocity_min = 2.0
+initial_velocity_max = 4.5
+gravity = Vector3(0, -12, 0)
+scale_amount_min = 0.6
+scale_amount_max = 1.2

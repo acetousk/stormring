@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/food.gd" id="1_food"]
+
+[sub_resource type="StandardMaterial3D" id="tomato"]
+albedo_color = Color(0.902, 0.224, 0.275, 1)
+roughness = 0.4
+
+[sub_resource type="SphereMesh" id="tomato_mesh"]
+material = SubResource("tomato")
+radius = 0.2
+height = 0.34
+radial_segments = 12
+rings = 6
+
+[sub_resource type="StandardMaterial3D" id="leaf"]
+albedo_color = Color(0.416, 0.6, 0.306, 1)
+
+[sub_resource type="CylinderMesh" id="stem_mesh"]
+material = SubResource("leaf")
+top_radius = 0.02
+bottom_radius = 0.08
+height = 0.08
+radial_segments = 5
+rings = 1
+
+[node name="Food" type="Node3D"]
+script = ExtResource("1_food")
+
+[node name="Tomato" type="MeshInstance3D" parent="."]
+mesh = SubResource("tomato_mesh")
+cast_shadow = 0
+
+[node name="Stem" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17, 0)
+mesh = SubResource("stem_mesh")
+cast_shadow = 0

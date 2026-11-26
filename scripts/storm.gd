@@ -1,5 +1,5 @@
 extends Node3D
-## The storm: a circle on the island. Inside is safe, outside hurts.
+## The jello spill: a circle in the lunchroom. Inside is safe. Outside, the green jello makes you messy.
 
 ## Middle of the safe circle (x and z on the ground).
 var center := Vector2.ZERO
@@ -19,7 +19,7 @@ func _ready() -> void:
 	add_to_group("storm")
 	# Local mode has no key for quick messages: send the storm the sure way there.
 	$StormSync.reliable = Net.is_local()
-	# Pick a middle near the center of the island, different each match.
+	# Pick a middle near the middle of the lunchroom, different each match.
 	center = Vector2(randf_range(-20.0, 20.0), randf_range(-20.0, 20.0))
 	radius = Tune.storm_start_radius
 	_update_wall()
@@ -40,7 +40,7 @@ func _process(delta: float) -> void:
 	if not Net.is_host():
 		return
 
-	# Once a second: hurt everyone outside. Smaller circle = more damage.
+	# Once a second: make everyone outside messier. Smaller circle = messier.
 	tick += delta
 	if tick >= 1.0:
 		tick -= 1.0
@@ -66,10 +66,12 @@ func shrink_part() -> float:
 	return clampf((time - Tune.storm_wait) / Tune.storm_shrink_time, 0.0, 1.0)
 
 
-## Move and size the purple wall to match the circle.
+## Move and size the green jello wall to match the circle. It wobbles a little, like jello.
 func _update_wall() -> void:
+	var t := Time.get_ticks_msec() / 1000.0
+	var wobble := 1.0 + 0.012 * sin(t * 3.0)
 	wall.position = Vector3(center.x, 0.0, center.y)
-	wall.scale = Vector3(maxf(radius, 0.01), 1.0, maxf(radius, 0.01))
+	wall.scale = Vector3(maxf(radius * wobble, 0.01), 1.0 + 0.02 * sin(t * 2.0), maxf(radius / wobble, 0.01))
 
 
 ## True if a spot is inside the safe circle.

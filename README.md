@@ -1,8 +1,8 @@
 # Stormring
 
-Glide onto an island, loot a rifle, build walls, and be the last one standing as the purple storm closes in.
+**Lunchroom Food Fight.** You are a kindergartner in a giant school lunchroom. Jump off a lunch table with a napkin parachute, grab tomatoes from lunch boxes, build tray walls, and be the last one clean as the jello spill closes in.
 
-A small 3D battle royale made with Godot 4.7.2. Play solo against 3 bots, or online with up to 4 friends.
+A small, kid-friendly 3D food fight made with Godot 4.7.2. No guns, no blood: only tomato splats. Play solo against 3 bots, or online with up to 4 friends.
 
 ## Play
 
@@ -17,11 +17,13 @@ Online rooms in the web, phone, and PC builds need this repo's GD-Sync keys (the
 ## How to play
 
 1. On the start screen pick **Solo**, or **Host** (you get a 4-digit room code) or **Join** (type a friend's code).
-2. You start high in the sky: glide down onto the island.
-3. Hold **Use** on a chest to get a rifle and a heal kit.
-4. Hit trees, rocks, and houses with the pickaxe for material, then build walls to block shots.
-5. Stay inside the circle: the purple storm shrinks and hurts anyone outside.
-6. Be the last one standing.
+2. You start on top of a lunch table. Jump off: your napkin opens and you float down.
+3. Hold **Use** on a lunch box to get tomatoes and a napkin.
+4. Throw tomatoes: aim with the dot in the middle. Tomatoes fly in an arc, so aim a bit high for far targets. Each splat makes someone less clean.
+5. Tap the tray carts with the spoon to get trays. Then build tray walls to block tomatoes.
+6. Too messy? Use a napkin to wipe clean.
+7. Stay inside the circle: the green jello spill closes in and makes anyone outside messy.
+8. Be the last one clean. At 0% clean you are splatted and out of the round.
 
 ## Controls
 
@@ -30,17 +32,17 @@ Online rooms in the web, phone, and PC builds need this repo's GD-Sync keys (the
 | Move | WASD | Left stick | Left stick |
 | Look | Mouse | Right stick | Drag right side |
 | Jump | Space | A | JUMP |
-| Fire / harvest | Left click | RT | FIRE |
+| Throw / scoop | Left click | RT | THROW |
 | Aim | Right click | LT | — |
-| Pickaxe / rifle | 1 / 2 | D-pad left / right | Automatic |
-| Reload | R (or auto) | RB | Automatic |
+| Spoon / tomatoes | 1 / 2 | D-pad left / right | Automatic |
+| Grab more tomatoes | R (or auto) | RB | Automatic |
 | Build mode | Q | Y | BUILD |
-| Open chest | Hold E | X | Hold USE |
-| Heal | H | B | HEAL |
+| Open lunch box | Hold E | X | Hold USE |
+| Wipe clean (napkin) | H | B | WIPE |
 
 ## Online
 
-Online play uses [GD-Sync](https://www.gd-sync.com/). In v0.2.0 the downloaded builds don't have an online key yet, so
+Online play uses [GD-Sync](https://www.gd-sync.com/). The downloaded builds don't have an online key yet, so
 **Host and Join only work when you run the game from the Godot editor** (same computer or Wi-Fi). Solo works everywhere.
 
 ## Help and feedback

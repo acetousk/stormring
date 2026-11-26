@@ -19,9 +19,9 @@ MAX_SECONDS = 120
 
 # How different the two copies may be and still count as "the same".
 # (Moves are sent 20 times a second and smoothed, so spots lag a little,
-#  most while gliding down fast.)
+#  most while someone falls or glides.)
 POS_GAP = 5.0  # meters
-HP_GAP = 24.0  # two bullets
+HP_GAP = 24.0  # about two tomatoes
 STORM_GAP = 2.0  # meters
 
 results = []  # (ok, text)

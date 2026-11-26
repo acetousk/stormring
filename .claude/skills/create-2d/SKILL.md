@@ -1,6 +1,6 @@
 ---
 name: create-2d
-description: Use when a 2D game needs a sprite, tile, item, icon, button, or UI image - "make the player look like …", "draw an enemy", "new icon". Makes original art in the DESIGN.md palette, as SVG or as PNG from a script.
+description: Use when a game (2D or 3D) needs a sprite, tile, item, icon, button, or UI image, or a new look for its screens - "make the player look like …", "draw an enemy", "new icon", "make the menu look like …", "the screens look boring". Makes original art in the DESIGN.md palette, as SVG or as PNG from a script.
 ---
 
 # Create 2D art
@@ -29,5 +29,14 @@ Use the gate in `game-plan` section 3: teach → plan → quiz (hints, never the
 - Max 512 × 512 px per image (web and phones).
 - Add every asset to `CREDITS.md`: file, who made it, license (`made with tools/make_art.py`, `CC0 from …`, or the kid's name).
 
-## 4. Show it
+## 4. Screens and menus ("make the screens look like …")
+Use this for the start screen, the HUD, and the end screen, in 2D and 3D games.
+1. **Ask what the look is made of.** One question: "What real thing do these screens look like?" (a school, a comic, a space ship). Write the answer and its colours in `DESIGN.md` under "UI style".
+2. **One bold thing.** Pick one screen element to be the memorable one (for example a chalkboard start screen). Keep the rest quiet and simple. Ask the kid which element it is, as a quiz with a hint.
+3. **One Theme.** Make one `ui/<name>.tres` Theme with the palette colours (StyleBoxFlat for panels and buttons, font sizes, a clear focus style for keyboard and gamepad). Set it on each screen's top Control. Do not colour each node by hand.
+4. **Real things from simple parts:** StyleBoxFlat (borders, corners, shadows), a small `canvas_item` shader for a texture (chalk, paper, metal), and SVG for small pictures. No downloaded fonts: use Godot's built-in font, made bigger or bolder in the Theme.
+5. **Words fit the look:** the HUD and buttons use game words in sentence case (for example "Report card", not "GAME OVER").
+6. **Check it fits:** the text must be easy to read and fit on a 1280×720 window and on a phone. Hide the HUD behind the end screen.
+
+## 5. Show it
 Put it in the game in the same step. `▶ Play: <where to look> — look for <the new art>`. Ask "keep, change, or undo?".

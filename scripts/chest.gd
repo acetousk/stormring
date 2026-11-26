@@ -1,12 +1,12 @@
 extends StaticBody3D
-## A chest: stand close and hold the action button to open it.
+## A lunch box: stand close and hold the action button to open it.
 
 var opened := false
 var hold_time := 0.0
 var player_near: Node3D = null
 
 @onready var label: Label3D = $Label
-@onready var lid: MeshInstance3D = $Lid
+@onready var lid: Node3D = $Lid
 
 
 func _ready() -> void:
@@ -45,14 +45,14 @@ func _process(delta: float) -> void:
 		Net.tell_host(_ask_open, Net.my_id())
 
 
-## Runs on the host: the first person to ask gets the chest.
+## Runs on the host: the first person to ask gets the lunch box.
 func _ask_open(by_id: int) -> void:
 	if opened:
 		return
 	Net.tell_everyone(_opened, by_id)
 
 
-## Runs on every screen: the lid goes away. The person who opened it gets the loot.
+## Runs on every screen: the lid comes off. The person who opened it gets tomatoes and a napkin.
 func _opened(by_id: int) -> void:
 	opened = true
 	label.visible = false

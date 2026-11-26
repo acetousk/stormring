@@ -1,0 +1,43 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://models/materials/blue.tres" id="1_blue"]
+[ext_resource type="Material" path="res://models/materials/chrome.tres" id="2_chrome"]
+
+[sub_resource type="CylinderMesh" id="m0"]
+material = ExtResource("1_blue")
+top_radius = 1.5
+bottom_radius = 1.35
+height = 3.6
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="m1"]
+material = ExtResource("2_chrome")
+top_radius = 1.6
+bottom_radius = 1.6
+height = 0.25
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="m2"]
+material = ExtResource("2_chrome")
+top_radius = 1.46
+bottom_radius = 1.46
+height = 0.2
+radial_segments = 12
+rings = 1
+
+[node name="TrashCan" type="Node3D"]
+
+[node name="Can" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+mesh = SubResource("m0")
+
+[node name="Rim" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.6, 0)
+mesh = SubResource("m1")
+
+[node name="Band" type="MeshInstance3D" parent="."]
+visibility_range_end = 40.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+mesh = SubResource("m2")

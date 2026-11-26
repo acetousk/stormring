@@ -6,8 +6,8 @@ extends Control
 ## Shown only on touch screens, or on your PC when Tune.force_touch is on
 ## (then the mouse acts like one finger).
 
-const FAINT := Color(0.914, 0.769, 0.416, 0.25) ## Sand, see-through
-const LINE := Color(0.914, 0.769, 0.416, 0.6)
+const FAINT := Color(1, 0.945, 0.839, 0.25) ## Cream, see-through
+const LINE := Color(1, 0.945, 0.839, 0.6)
 
 ## Left thumb stick: where it sits and how far the knob can go.
 const STICK_SPOT := Vector2(200, -200) ## From the bottom-left corner
@@ -32,7 +32,7 @@ func _ready() -> void:
 var _mouse_events := {} ## action → the mouse-button events we took away
 
 
-## A tap also counts as a mouse click, and a mouse click fires the rifle.
+## A tap also counts as a mouse click, and a mouse click throws a tomato.
 ## With touch controls, only the on-screen buttons should do that.
 func _unhook_mouse_buttons() -> void:
 	for action in InputMap.get_actions():
@@ -44,13 +44,13 @@ func _unhook_mouse_buttons() -> void:
 
 ## The 5 buttons: label, the action it presses, spot from the bottom-right corner, size.
 const BUTTONS := [
-	{"text": "FIRE", "action": "fire", "spot": Vector2(-180, -240), "radius": 80.0},
+	{"text": "THROW", "action": "fire", "spot": Vector2(-180, -240), "radius": 80.0},
 	{"text": "JUMP", "action": "jump", "spot": Vector2(-340, -110), "radius": 55.0},
 	{"text": "BUILD", "action": "build", "spot": Vector2(-90, -420), "radius": 50.0},
 	{"text": "USE", "action": "action", "spot": Vector2(-300, -300), "radius": 50.0},
-	{"text": "HEAL", "action": "heal", "spot": Vector2(-80, -90), "radius": 45.0},
+	{"text": "WIPE", "action": "heal", "spot": Vector2(-80, -90), "radius": 45.0},
 ]
-const HELD := Color(0.914, 0.769, 0.416, 0.55) ## A button while your finger is on it
+const HELD := Color(1, 0.945, 0.839, 0.55) ## A button while your finger is on it
 
 var button_fingers := {} ## finger → the button it holds
 var stick_finger := -1 ## Which finger holds the stick (-1 = none)

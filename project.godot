@@ -4,7 +4,7 @@ config_version=5
 [application]
 
 config/name="Stormring"
-config/version="0.2.2"
+config/version="0.3.0"
 run/main_scene="res://scenes/lobby.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
@@ -25,6 +25,10 @@ enabled=PackedStringArray("res://addons/GD-Sync/plugin.cfg")
 
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+
+[gui]
+
+theme/custom="res://ui/school.tres"
 
 [input]
 

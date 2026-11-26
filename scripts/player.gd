@@ -1,27 +1,33 @@
 extends Fighter
-## The player: reads your controls, moves the capsule, and turns the camera.
-## (HP and taking damage come from health.gd.)
+## The player: reads your controls, moves your kid, and turns the camera.
+## (Clean meter and getting splatted come from health.gd.)
 
-## True while you float down from the sky at the start.
+## True while you float down under your napkin parachute (after you jump off a table).
 var gliding := false
-## True once you have the Burst rifle.
-var has_rifle := false
-## How many heal kits you carry.
-var heal_kits := 0
-## HP still to come from the heal kit you are using (0 = not healing).
-var heal_left := 0.0
-## Shots left in the rifle before you must reload.
-var ammo := 0
-## Seconds until you can fire the next burst.
-var fire_cooldown := 0.0
-## True while you reload (you cannot shoot).
-var reloading := false
-## What is in your hand: 1 = pickaxe, 2 = rifle.
+## True once you found tomatoes in a lunch box.
+var has_tomatoes := false
+## How many napkins you carry.
+var napkins := 0
+## Clean still to come from the napkin you are using (0 = not wiping).
+var wipe_left := 0.0
+## Tomatoes in your hands before you must grab more.
+var tomatoes := 0
+## Seconds until you can throw or scoop again.
+var throw_cooldown := 0.0
+## True while you grab more tomatoes (you cannot throw).
+var refilling := false
+## What is in your hand: 1 = spoon, 2 = tomatoes.
 var slot := 1
-## Building material you have collected.
-var material := 0
-## True while build mode is on (fire places a wall instead of shooting).
+## Lunch trays you grabbed from tray carts (you build tray walls with them).
+var trays := 0
+## True while build mode is on (throw places a tray wall instead).
 var building := false
+## Which way your kid faces. Sent to the other screens (MoveSync).
+var body_yaw := 0.0:
+	set(value):
+		body_yaw = value
+		if has_node("Body"):
+			$Body.rotation.y = value
 
 ## True when the ghost wall spot is OK to build on.
 var can_build := false
@@ -53,9 +59,6 @@ func _ready() -> void:
 	# My own copy of the ghost color, so I can make it green or purple.
 	ghost_mat = ghost.mesh.material.duplicate()
 	ghost.material_override = ghost_mat
-	# Start high in the sky and glide down.
-	global_position.y = Tune.drop_height
-	gliding = true
 
 
 ## True if this player is the one you control.
@@ -76,101 +79,92 @@ func _process(delta: float) -> void:
 	# Online: wait until the host says this player is yours.
 	if not is_local and not is_out and Net.online and Net.is_mine(self):
 		become_local()
-	# The host owns HP, so the host also runs healing (HpSync sends it back).
-	if Net.is_host() and heal_left > 0.0:
-		var step := minf(Tune.heal_amount / Tune.heal_time * delta, heal_left)
-		heal_left -= step
+	# The napkin parachute is open while you float down (every screen: MoveSync sends gliding).
+	$Body/Napkin.visible = gliding
+	# The host owns the clean meter, so the host also runs the napkin (HpSync sends it back).
+	if Net.is_host() and wipe_left > 0.0:
+		var step := minf(Tune.napkin_clean / Tune.napkin_time * delta, wipe_left)
+		wipe_left -= step
 		hp = minf(hp + step, Tune.max_hp)
 		if hp >= Tune.max_hp:
-			heal_left = 0.0
+			wipe_left = 0.0
 
 
-## Runs on the host: start healing this player.
-func _ask_heal() -> void:
+## Runs on the host: start wiping this player clean.
+func _ask_wipe() -> void:
 	if not is_out:
-		heal_left = Tune.heal_amount
+		wipe_left = Tune.napkin_clean
 
 
-## When you are out: hide your body and stop moving. The camera stays.
+## When you are splatted: hide your kid and stop moving. The camera stays.
 func _on_out() -> void:
 	$Body.visible = false
 	$Shape.set_deferred("disabled", true)
-	heal_left = 0.0
+	wipe_left = 0.0
 	set_physics_process(false)
 	set_process_unhandled_input(false)
 
 
-## A chest calls this when you open it.
+## A lunch box calls this when you open it.
 func give_loot() -> void:
-	if not has_rifle:
-		has_rifle = true
-		ammo = Tune.rifle_mag
-		slot = 2  # Your first rifle goes straight into your hand.
-	heal_kits = mini(heal_kits + 1, Tune.max_heal_kits)
+	if not has_tomatoes:
+		has_tomatoes = true
+		tomatoes = Tune.tomato_bag
+		slot = 2  # Your first tomatoes go straight into your hand.
+	else:
+		tomatoes = Tune.tomato_bag # A lunch box also fills your hands.
+	napkins = mini(napkins + 1, Tune.max_napkins)
 
 
-## Fire one burst: a few bullets, a tiny gap between each.
-func _fire_burst() -> void:
-	fire_cooldown = Tune.rifle_fire_every
-	for i in Tune.rifle_burst_shots:
-		if ammo <= 0 or reloading:
-			return
-		ammo -= 1
-		_shoot_bullet()
-		await get_tree().create_timer(Tune.rifle_burst_gap).timeout
-
-
-## Reload: wait, then fill the magazine.
-func _reload() -> void:
-	reloading = true
-	await get_tree().create_timer(Tune.rifle_reload_time).timeout
-	ammo = Tune.rifle_mag
-	reloading = false
-
-
-## One bullet: an invisible line from the middle of the screen.
-func _shoot_bullet() -> void:
+## Throw one tomato at the spot under the crosshair.
+func _throw_tomato() -> void:
+	throw_cooldown = Tune.throw_every
+	tomatoes -= 1
+	# Where does the crosshair point? An invisible line from the middle of the screen.
 	var center := get_viewport().get_visible_rect().size / 2.0
 	var from := camera.project_ray_origin(center)
-	var to := from + camera.project_ray_normal(center) * Tune.rifle_range
+	var to := from + camera.project_ray_normal(center) * Tune.throw_range
 	var query := PhysicsRayQueryParameters3D.create(from, to, 1, [get_rid()])
-	Sfx.play_for_everyone("shot", global_position)
 	var hit := get_world_3d().direct_space_state.intersect_ray(query)
-	if hit.is_empty():
-		return
-	# Whatever the line touches first takes the damage (if it can).
-	# Players and bots: "I hit you" goes to the host, who takes the HP.
-	if hit.collider is Fighter:
-		hit.collider.hurt(Tune.rifle_damage, self)
-		Sfx.play("hit", global_position) # Only you hear your hits.
-	elif hit.collider.has_method("take_damage"):
-		hit.collider.take_damage(Tune.rifle_damage, self) # Walls ask the host too
-		Sfx.play("hit", global_position)
+	var target: Vector3 = to if hit.is_empty() else hit.position
+	# The tomato leaves from your right hand.
+	var hand := global_position + Vector3(0, 1.4, 0) + cam_yaw.global_basis.x * 0.5
+	body_yaw = cam_yaw.rotation.y # Face the way you throw.
+	get_tree().current_scene.throw_food(hand, Tune.throw_speed, target, self)
 
 
-## Pickaxe reach: a short line from your chest the way the camera looks.
-func _pickaxe_hit() -> Dictionary:
+## Grab more tomatoes: wait, then fill your hands.
+func _refill() -> void:
+	refilling = true
+	await get_tree().create_timer(Tune.refill_time).timeout
+	tomatoes = Tune.tomato_bag
+	refilling = false
+
+
+## Spoon reach: a short line from your chest the way the camera looks.
+func _spoon_hit() -> Dictionary:
 	var from := global_position + Vector3(0, 1.2, 0)
-	var to := from + -camera.global_basis.z * Tune.pickaxe_reach
+	var to := from + -camera.global_basis.z * Tune.spoon_reach
 	var query := PhysicsRayQueryParameters3D.create(from, to, 1, [get_rid()])
 	return get_world_3d().direct_space_state.intersect_ray(query)
 
 
-## True if a tree, rock, or house is close enough to hit with the pickaxe.
+## True if a tray cart is close enough to tap with the spoon.
 func _facing_harvest() -> bool:
-	var hit := _pickaxe_hit()
+	var hit := _spoon_hit()
 	return not hit.is_empty() and hit.collider.get_parent().is_in_group("harvest")
 
 
-## Pickaxe swing.
-func _swing_pickaxe() -> void:
-	fire_cooldown = Tune.pickaxe_swing_every
-	var hit := _pickaxe_hit()
+## Spoon tap: grab trays from a tray cart.
+func _swing_spoon() -> void:
+	throw_cooldown = Tune.spoon_swing_every
+	body_yaw = cam_yaw.rotation.y
+	var hit := _spoon_hit()
 	if hit.is_empty():
 		return
-	# Trees, rocks, and houses live under the "harvest" node.
+	# Tray carts live under the "harvest" node.
 	if hit.collider.get_parent().is_in_group("harvest"):
-		material = mini(material + Tune.material_per_hit, Tune.max_material)
+		trays = mini(trays + Tune.trays_per_hit, Tune.max_trays)
 		Sfx.play_for_everyone("harvest", hit.position)
 
 
@@ -185,7 +179,7 @@ func _update_ghost() -> void:
 	ghost.global_position = cell + dir * grid / 2.0 + Vector3(0, global_position.y + grid / 2.0, 0)
 	ghost.global_rotation = Vector3(0, PI / 2.0 if dir.x != 0.0 else 0.0, 0)
 
-	# Can I build here? Need enough material, and nothing already in the way.
+	# Can I build here? Need enough trays, and nothing already in the way.
 	var shape := BoxShape3D.new()
 	shape.size = Vector3(grid - 0.2, grid - 0.4, 0.15)
 	var query := PhysicsShapeQueryParameters3D.new()
@@ -193,13 +187,13 @@ func _update_ghost() -> void:
 	query.transform = ghost.global_transform.translated(Vector3(0, 0.1, 0))
 	query.exclude = [get_rid()]
 	var blocked := not get_world_3d().direct_space_state.intersect_shape(query, 1).is_empty()
-	can_build = material >= Tune.wall_cost and not blocked
+	can_build = trays >= Tune.wall_cost and not blocked
 	ghost_mat.albedo_color = GHOST_OK if can_build else GHOST_NO
 
 
-## Turn the ghost into a real wall: pay, then ask the host to build it.
+## Turn the ghost into a real tray wall: pay, then ask the host to build it.
 func _place_wall() -> void:
-	material -= Tune.wall_cost
+	trays -= Tune.wall_cost
 	Net.tell_host(_ask_wall, ghost.global_transform)
 
 
@@ -244,14 +238,14 @@ func _physics_process(delta: float) -> void:
 	# Slots: switch what is in your hand.
 	if Input.is_action_just_pressed("slot_1"):
 		slot = 1
-	elif Input.is_action_just_pressed("slot_2") and has_rifle:
+	elif Input.is_action_just_pressed("slot_2") and has_tomatoes:
 		slot = 2
-	# Touch has no swap button: aim at a tree, rock, or house up close and
-	# FIRE swings the pickaxe; anywhere else it fires the rifle.
-	if TouchControls.is_on() and has_rifle:
+	# Touch has no swap button: aim at a tree, cheese, or house up close and
+	# THROW scoops with the spoon; anywhere else it throws a tomato.
+	if TouchControls.is_on() and has_tomatoes:
 		slot = 1 if _facing_harvest() else 2
 
-	# Fire: hold the fire button to keep shooting bursts.
+	# Throw: hold the button to keep throwing.
 	# Build mode: Q turns it on and off. Picking a slot turns it off.
 	if Input.is_action_just_pressed("build"):
 		building = not building
@@ -261,31 +255,34 @@ func _physics_process(delta: float) -> void:
 	if building:
 		_update_ghost()
 
-	fire_cooldown -= delta
+	throw_cooldown -= delta
 	if building:
 		if Input.is_action_just_pressed("fire") and can_build:
 			_place_wall()
-	elif slot == 1 and Input.is_action_pressed("fire") and fire_cooldown <= 0.0:
-		_swing_pickaxe()
-	elif slot == 2 and has_rifle and not reloading:
-		if Input.is_action_pressed("fire") and fire_cooldown <= 0.0 and ammo > 0:
-			_fire_burst()
-		# Reload when you press the button, or by itself when empty.
-		elif ammo < Tune.rifle_mag and (Input.is_action_just_pressed("reload") or (ammo == 0 and fire_cooldown <= 0.0)):
-			_reload()
+	elif slot == 1 and Input.is_action_pressed("fire") and throw_cooldown <= 0.0:
+		_swing_spoon()
+	elif slot == 2 and has_tomatoes and not refilling:
+		if Input.is_action_pressed("fire") and throw_cooldown <= 0.0 and tomatoes > 0:
+			_throw_tomato()
+		# Grab more when you press the button, or by itself when your hands are empty.
+		elif tomatoes < Tune.tomato_bag and (Input.is_action_just_pressed("reload") or (tomatoes == 0 and throw_cooldown <= 0.0)):
+			_refill()
 
-	# Heal: use a kit if you have one and are hurt. The host gives HP back bit by bit.
-	if Input.is_action_just_pressed("heal") and heal_kits > 0 and heal_left <= 0.0 and hp < Tune.max_hp:
-		heal_kits -= 1
-		Net.tell_host(_ask_heal)
+	# Napkin: wipe off if you have one and are messy. The host makes you clean bit by bit.
+	if Input.is_action_just_pressed("heal") and napkins > 0 and wipe_left <= 0.0 and hp < Tune.max_hp:
+		napkins -= 1
+		Net.tell_host(_ask_wipe)
 
 	# Aim: zoom the camera in smoothly while held, back out when let go.
 	var target_fov := Tune.aim_fov if Input.is_action_pressed("aim") else Tune.normal_fov
 	camera.fov = lerp(camera.fov, target_fov, 12.0 * delta)
 
-	# Glide: sink at a steady speed until you touch the ground.
-	if gliding and is_on_floor():
+	# Napkin parachute: it opens by itself when you fall fast (off a table),
+	# then you sink slowly until you touch the floor.
+	if is_on_floor():
 		gliding = false
+	elif velocity.y < -Tune.napkin_open_speed:
+		gliding = true
 	var speed := Tune.glide_steer if gliding else Tune.run_speed
 
 	# Gravity pulls you down when you are in the air.
@@ -304,5 +301,8 @@ func _physics_process(delta: float) -> void:
 	var direction := Vector3(input.x, 0.0, input.y).rotated(Vector3.UP, cam_yaw.global_rotation.y)
 	velocity.x = direction.x * speed
 	velocity.z = direction.z * speed
+	# Turn your kid the way you run (smoothly).
+	if direction.length() > 0.1 and throw_cooldown <= 0.0:
+		body_yaw = lerp_angle(body_yaw, atan2(-direction.x, -direction.z), 10.0 * delta)
 
 	move_and_slide()

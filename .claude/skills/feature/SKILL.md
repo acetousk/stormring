@@ -15,12 +15,20 @@ Use the gate in `game-plan` section 3: teach → plan → quiz (hints, never the
    - **Not possible here:** why, and the closest option.
 3. Not in `DESIGN.md`? Ask: "Add it now, or put it in 'Not in v1.0'?"
 4. Online game? Say what the host runs and what each player sends.
+5. Not kid-friendly (realistic guns, blood, gore)? Say why in one line (the game is for friends of all ages, and it is on a public page). Offer a friendly version with the same fun: splats, tags, bonks, or a "you are out" that is silly, not hurt. Example: a rifle → a tomato throw.
+
+## 1b. A big change (a new theme or the whole game)
+Many files change at once, so plan it in layers. Keep the game playable after each card.
+1. **Design card first.** Update `DESIGN.md`: the new one sentence, the controls, the art, and a **word list** (old word → new word, for example "rifle → tomatoes"). The kid checks the list. Quiz: "What does <old word> become, and why?"
+2. **One card per system** after that: the main action, then each other system (building, pickups, enemies), then art (`create-3d` or `create-2d`), then sound (`create-audio`), then the words on screen, then the player docs and ship.
+3. Each card's Output lists every file it changes, including `scripts/tune.gd` names and the tests. Rename a `Tune` value only in the same card that changes every file that uses it.
+4. Search the repo for each old word before the last card. Nothing left on screen or in the player docs.
 
 ## 2. Teach
 Explain how it will work with a game the kid knows. Do not give the plan yet.
 
 ## 3. Plan
-1. Cards `F<n>`: Input, Output, Done when. 5–30 minutes each.
+1. Cards `F<n>` (the next free number in `PLAN.md`): Input, Output, Done when. 5–30 minutes each.
 2. Numbered steps. One step = one change the kid can see.
 3. New art or sound? Make it its own step with a `create-*` skill.
 4. New feel numbers go in `scripts/tune.gd`.

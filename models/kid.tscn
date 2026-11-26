@@ -1,0 +1,105 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://models/materials/blue.tres" id="1_blue"]
+[ext_resource type="Material" path="res://models/materials/cream.tres" id="2_cream"]
+[ext_resource type="Material" path="res://models/materials/crust.tres" id="3_crust"]
+[ext_resource type="Material" path="res://models/materials/dark.tres" id="4_dark"]
+[ext_resource type="Material" path="res://models/materials/sand.tres" id="5_sand"]
+[ext_resource type="Material" path="res://models/materials/tomato.tres" id="6_tomato"]
+
+[sub_resource type="BoxMesh" id="m0"]
+material = ExtResource("1_blue")
+size = Vector3(0.5, 0.6, 0.3)
+
+[sub_resource type="CapsuleMesh" id="m1"]
+material = ExtResource("2_cream")
+radius = 0.36
+height = 0.95
+radial_segments = 12
+rings = 4
+
+[sub_resource type="SphereMesh" id="m2"]
+material = ExtResource("5_sand")
+radius = 0.42
+height = 0.84
+radial_segments = 12
+rings = 6
+
+[sub_resource type="SphereMesh" id="m3"]
+material = ExtResource("3_crust")
+radius = 0.45
+height = 0.6
+is_hemisphere = true
+radial_segments = 12
+rings = 4
+
+[sub_resource type="SphereMesh" id="m4"]
+material = ExtResource("4_dark")
+radius = 0.06
+height = 0.12
+radial_segments = 6
+rings = 3
+
+[sub_resource type="SphereMesh" id="m5"]
+material = ExtResource("4_dark")
+radius = 0.06
+height = 0.12
+radial_segments = 6
+rings = 3
+
+[sub_resource type="SphereMesh" id="m6"]
+material = ExtResource("5_sand")
+radius = 0.13
+height = 0.26
+radial_segments = 8
+rings = 4
+
+[sub_resource type="BoxMesh" id="m7"]
+material = ExtResource("6_tomato")
+size = Vector3(0.42, 0.46, 0.2)
+
+[sub_resource type="BoxMesh" id="m8"]
+material = ExtResource("3_crust")
+size = Vector3(0.44, 0.16, 0.22)
+
+[node name="Kid" type="Node3D"]
+
+[node name="Legs" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+mesh = SubResource("m0")
+
+[node name="Torso" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
+mesh = SubResource("m1")
+
+[node name="Head" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
+mesh = SubResource("m2")
+
+[node name="Hair" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.82, 0.03)
+mesh = SubResource("m3")
+
+[node name="EyeL" type="MeshInstance3D" parent="."]
+visibility_range_end = 40.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 1.75, -0.38)
+mesh = SubResource("m4")
+
+[node name="EyeR" type="MeshInstance3D" parent="."]
+visibility_range_end = 40.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 1.75, -0.38)
+mesh = SubResource("m5")
+
+[node name="Hand" type="MeshInstance3D" parent="."]
+visibility_range_end = 40.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0.95, -0.15)
+mesh = SubResource("m6")
+
+[node name="Backpack" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05, 0.4)
+mesh = SubResource("m7")
+
+[node name="Flap" type="MeshInstance3D" parent="."]
+visibility_range_end = 40.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22, 0.41)
+mesh = SubResource("m8")

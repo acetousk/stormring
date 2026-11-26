@@ -1,87 +1,132 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/hud.gd" id="1_hud"]
 [ext_resource type="PackedScene" path="res://scenes/touch.tscn" id="2_touch"]
+[ext_resource type="Texture2D" path="res://ui/gold_star.svg" id="3_star"]
 
-[sub_resource type="LabelSettings" id="text"]
-font_size = 32
-font_color = Color(0.914, 0.769, 0.416, 1)
+[sub_resource type="LabelSettings" id="ink"]
+font_size = 26
+font_color = Color(0.133, 0.251, 0.549, 1)
+
+[sub_resource type="LabelSettings" id="caption"]
+font_size = 20
+font_color = Color(0.133, 0.251, 0.549, 0.75)
+
+[sub_resource type="LabelSettings" id="pen"]
+font_size = 76
+font_color = Color(0.902, 0.224, 0.275, 1)
+
+[sub_resource type="LabelSettings" id="world"]
+font_size = 30
+font_color = Color(1, 0.945, 0.839, 1)
 outline_size = 8
 outline_color = Color(0.149, 0.275, 0.325, 1)
 
-[sub_resource type="LabelSettings" id="big"]
-font_size = 96
-font_color = Color(0.914, 0.769, 0.416, 1)
-outline_size = 16
-outline_color = Color(0.482, 0.173, 0.749, 1)
+[sub_resource type="LabelSettings" id="stamp"]
+font_size = 40
+font_color = Color(0.902, 0.224, 0.275, 1)
+
+[sub_resource type="LabelSettings" id="title"]
+font_size = 60
+font_color = Color(0.133, 0.251, 0.549, 1)
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_hud")
 
 [node name="Touch" parent="." instance=ExtResource("2_touch")]
 
-[node name="HP" type="Label" parent="."]
+[node name="Grade" type="PanelContainer" parent="."]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 24.0
-offset_top = -64.0
-offset_right = 300.0
-offset_bottom = -20.0
-text = "HP 100"
-label_settings = SubResource("text")
+offset_top = -128.0
+offset_right = 254.0
+offset_bottom = -24.0
+grow_vertical = 0
+rotation = -0.035
+mouse_filter = 2
 
-[node name="Ammo" type="Label" parent="."]
+[node name="Row" type="HBoxContainer" parent="Grade"]
+layout_mode = 2
+theme_override_constants/separation = 16
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="Grade/Row"]
+layout_mode = 2
+custom_minimum_size = Vector2(96, 0)
+horizontal_alignment = 1
+text = "A+"
+label_settings = SubResource("pen")
+
+[node name="Col" type="VBoxContainer" parent="Grade/Row"]
+layout_mode = 2
+alignment = 1
+mouse_filter = 2
+
+[node name="Caption" type="Label" parent="Grade/Row/Col"]
+layout_mode = 2
+text = "Clean"
+label_settings = SubResource("caption")
+
+[node name="HP" type="Label" parent="Grade/Row/Col"]
+layout_mode = 2
+text = "100%"
+label_settings = SubResource("ink")
+
+[node name="Pocket" type="PanelContainer" parent="."]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -824.0
-offset_top = -64.0
-offset_right = -24.0
-offset_bottom = -20.0
-horizontal_alignment = 2
-text = "No gun"
-label_settings = SubResource("text")
-
-[node name="Heals" type="Label" parent="."]
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -524.0
+offset_left = -560.0
 offset_top = -112.0
 offset_right = -24.0
-offset_bottom = -68.0
+offset_bottom = -24.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="Col" type="VBoxContainer" parent="Pocket"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Heals" type="Label" parent="Pocket/Col"]
+layout_mode = 2
 horizontal_alignment = 2
-text = "Heal kits 0"
-label_settings = SubResource("text")
+text = "Trays 0   Napkins 0"
+label_settings = SubResource("ink")
+
+[node name="Ammo" type="Label" parent="Pocket/Col"]
+layout_mode = 2
+horizontal_alignment = 2
+text = "[1] Spoon"
+label_settings = SubResource("ink")
 
 [node name="Left" type="Label" parent="."]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -424.0
+offset_left = -524.0
 offset_top = 20.0
 offset_right = -24.0
 offset_bottom = 64.0
 horizontal_alignment = 2
-text = "Players left 4"
-label_settings = SubResource("text")
+text = "Kids left 4"
+label_settings = SubResource("world")
 
 [node name="StormTimer" type="Label" parent="."]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -524.0
-offset_top = 68.0
+offset_top = 64.0
 offset_right = -24.0
-offset_bottom = 112.0
+offset_bottom = 108.0
 horizontal_alignment = 2
-text = "Storm in 0:45"
-label_settings = SubResource("text")
+text = "Jello spill in 0:35"
+label_settings = SubResource("world")
 
 [node name="NetStatus" type="Label" parent="."]
 offset_left = 24.0
@@ -89,47 +134,100 @@ offset_top = 24.0
 offset_right = 624.0
 offset_bottom = 68.0
 text = "Not connected"
-label_settings = SubResource("text")
+label_settings = SubResource("world")
 
-[node name="StormWarning" type="Label" parent="."]
+[node name="StormWarning" type="PanelContainer" parent="."]
+theme_type_variation = &"Slip"
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -300.0
-offset_top = 90.0
-offset_right = 300.0
+offset_left = -260.0
+offset_top = 110.0
+offset_right = 260.0
 offset_bottom = 190.0
-horizontal_alignment = 1
-text = "IN THE STORM!"
-label_settings = SubResource("big")
+grow_horizontal = 2
+rotation = -0.05
+pivot_offset = Vector2(260, 40)
+mouse_filter = 2
 
-[node name="End" type="VBoxContainer" parent="."]
+[node name="Text" type="Label" parent="StormWarning"]
+layout_mode = 2
+horizontal_alignment = 1
+text = "Get out of the jello spill!"
+label_settings = SubResource("stamp")
+
+[node name="End" type="PanelContainer" parent="."]
+theme_type_variation = &"ReportCard"
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -400.0
-offset_top = -120.0
-offset_right = 400.0
-offset_bottom = 120.0
+offset_left = -380.0
+offset_top = -170.0
+offset_right = 380.0
+offset_bottom = 170.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.02
+pivot_offset = Vector2(380, 170)
 mouse_filter = 2
+
+[node name="Box" type="VBoxContainer" parent="End"]
+layout_mode = 2
+theme_override_constants/separation = 10
 alignment = 1
+mouse_filter = 2
 
-[node name="Title" type="Label" parent="End"]
-horizontal_alignment = 1
-text = "Victory!"
-label_settings = SubResource("big")
+[node name="Head" type="Label" parent="End/Box"]
+layout_mode = 2
+text = "Report card"
+label_settings = SubResource("caption")
 
-[node name="Stats" type="Label" parent="End"]
+[node name="Line" type="ColorRect" parent="End/Box"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 3)
+color = Color(0.133, 0.251, 0.549, 0.5)
+mouse_filter = 2
+
+[node name="Grades" type="HBoxContainer" parent="End/Box"]
+layout_mode = 2
+theme_override_constants/separation = 24
+mouse_filter = 2
+
+[node name="Grade" type="Label" parent="End/Box/Grades"]
+layout_mode = 2
+custom_minimum_size = Vector2(110, 0)
 horizontal_alignment = 1
+text = "A+"
+label_settings = SubResource("pen")
+
+[node name="Title" type="Label" parent="End/Box/Grades"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Last one clean!"
+label_settings = SubResource("title")
+
+[node name="Stats" type="Label" parent="End/Box"]
+layout_mode = 2
 text = "Place #1"
-label_settings = SubResource("text")
+label_settings = SubResource("ink")
 
-[node name="Hint" type="Label" parent="End"]
-horizontal_alignment = 1
+[node name="Hint" type="Label" parent="End/Box"]
+layout_mode = 2
+autowrap_mode = 3
 text = "Click, tap or press Space to play again"
-label_settings = SubResource("text")
+label_settings = SubResource("caption")
+
+[node name="Star" type="TextureRect" parent="End"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+custom_minimum_size = Vector2(120, 120)
+texture = ExtResource("3_star")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
 
 [node name="Crosshair" type="Control" parent="."]
 anchors_preset = 8
@@ -141,32 +239,33 @@ mouse_filter = 2
 
 [node name="Up" type="ColorRect" parent="Crosshair"]
 offset_left = -1.5
-offset_top = -14.0
+offset_top = -14
 offset_right = 1.5
-offset_bottom = -5.0
+offset_bottom = -5
 mouse_filter = 2
-color = Color(0.914, 0.769, 0.416, 1)
+color = Color(1, 0.945, 0.839, 1)
 
 [node name="Down" type="ColorRect" parent="Crosshair"]
 offset_left = -1.5
-offset_top = 5.0
+offset_top = 5
 offset_right = 1.5
-offset_bottom = 14.0
+offset_bottom = 14
 mouse_filter = 2
-color = Color(0.914, 0.769, 0.416, 1)
+color = Color(1, 0.945, 0.839, 1)
 
 [node name="Left" type="ColorRect" parent="Crosshair"]
-offset_left = -14.0
+offset_left = -14
 offset_top = -1.5
-offset_right = -5.0
+offset_right = -5
 offset_bottom = 1.5
 mouse_filter = 2
-color = Color(0.914, 0.769, 0.416, 1)
+color = Color(1, 0.945, 0.839, 1)
 
 [node name="Right" type="ColorRect" parent="Crosshair"]
-offset_left = 5.0
+offset_left = 5
 offset_top = -1.5
-offset_right = 14.0
+offset_right = 14
 offset_bottom = 1.5
 mouse_filter = 2
-color = Color(0.914, 0.769, 0.416, 1)
+color = Color(1, 0.945, 0.839, 1)
+
