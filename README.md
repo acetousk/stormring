@@ -6,11 +6,13 @@ A small 3D battle royale made with Godot 4.7.2. Play solo against 3 bots, or onl
 
 ## Play
 
-- **In your browser:** https://acetousk.github.io/stormring/
-- **Windows, Linux, Android:** download from the [Releases page](https://github.com/acetousk/stormring/releases)
-  - Windows: unzip, then run the game file. (Windows may warn about an unknown app: click "More info" → "Run anyway".)
-  - Linux: unzip, then run the game file.
-  - Android: open the `.apk` on your phone and allow installing from this source.
+- **Web:** https://acetousk.github.io/stormring/ (Chrome, Firefox, or Edge). Old version? Press Ctrl+Shift+R.
+- **Android:** install **Obtainium**, tap **Add app**, and paste `https://github.com/acetousk/stormring`. Obtainium shows each update.
+- **Windows:** on the [Releases page](https://github.com/acetousk/stormring/releases), download `stormring-<version>-windows.zip`. Unzip it and run the game. (Windows may warn about an unknown app: click "More info" → "Run anyway".)
+- **Linux:** on the [Releases page](https://github.com/acetousk/stormring/releases), download `stormring-<version>-linux-x86_64.tar.gz`. Unpack it and run the game.
+- Mac and iPhone: use the web version.
+
+Online rooms in the web, phone, and PC builds need this repo's GD-Sync keys (the kit's `online` skill). Until then, rooms work only inside Godot (2 windows, local mode).
 
 ## How to play
 

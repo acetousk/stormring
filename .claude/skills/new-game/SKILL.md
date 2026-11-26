@@ -59,7 +59,7 @@ Some steps need the kid's hands in Godot. Say exactly where to click. Then stop 
 - G7, before the first ship: the GitHub settings check. Without it the first release fails: no web page, and no Android build. Ask: "Has a parent done the 3 GitHub settings for this game?" Not sure → give the parent these clicks, one at a time, and wait for `done` after each:
   1. The game's GitHub page → **Settings → Pages** → **Source**: **GitHub Actions**.
   2. **Settings → Environments → github-pages → Deployment branches and tags** → **Add deployment branch or tag rule** → type **Tag**, pattern `v*`. (No `github-pages` environment yet? Step 1 makes it. Reload the page.)
-  3. **Settings → Secrets and variables → Actions** → **New repository secret**, 3 times: `ANDROID_KEYSTORE_B64`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`. The values come from the parent's keystore (`1-setup.md`, part C, "Android signing"). Never ask for or see the values.
+  3. **Settings → Secrets and variables → Actions** → **New repository secret**, 3 times: `ANDROID_KEYSTORE_B64`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`. The values come from the parent's keystore (the kit guide `docs/1-setup.md` (github.com/acetousk/game-kit), part C, "Android signing"). Never ask for or see the values.
   The GD-Sync secrets come later, in the `online` skill. Each setting is a one-time job for each game repo.
 
 ## 5. After v0.1.0

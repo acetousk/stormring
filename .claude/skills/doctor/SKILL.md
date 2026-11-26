@@ -30,13 +30,13 @@ Run checks 1–3 with no `timeout`, `cd`, or `&&` around them, so they need no a
 
 | ❌ | Likely cause | Who fixes | Fix |
 |---|---|---|---|
-| 1 `godot` not found | Godot is not on PATH | Parent | `1-setup.md`, part A |
+| 1 `godot` not found | Godot is not on PATH | Parent | the kit guide `docs/1-setup.md` (github.com/acetousk/game-kit), part D, "Put Godot on the PATH" |
 | 1 wrong version | Old Godot | Parent | Install the version from check 1 |
 | 2 or 3 errors | A script error | Claude | Use the `bug` skill with the first error line |
 | 4 missing preset | Starter files changed | Parent | Copy `export_presets.cfg` from the starter |
 | 5 | Python is missing | Parent | python.org, and tick "Add to PATH" |
 | 6 | Git has no name | Kid, with help | `git config --global user.name "…"` (the kid types it) |
-| 7 or 8 | The repo is not set up | Parent | `1-setup.md`, part B |
+| 7 or 8 | The repo is not set up | Parent | the kit guide `docs/1-setup.md` (github.com/acetousk/game-kit), part C (repo) and part E (first release) |
 | 10 | The plugin is off | Kid | Project → Project Settings → Plugins → GD-Sync → On |
 | 11 | No key yet | Kid | The `online` skill |
 | 12 | The folder is not trusted, so Claude Code ignores the allow list and asks for everything | Kid | Close Claude Code. Open it again in the game folder. Click **Yes, I trust this folder**. |

@@ -66,7 +66,7 @@ Every skill that changes a file uses this gate. No edit before the kid passes th
    - `idea: …` → add it to "Not in v1.0", then go on
    - `?` or `why?` → explain; do no more steps until the kid understands
 8. Change only the Output files. Need more? Stop. Show the new plan and quiz on what changed.
-9. After the last step, check "Done when" and tick the card. Ask "Ship it now?" Yes → `ship` skill. You do every git step; never ask the kid to.
+9. After the last step, check "Done when" and tick the card. Ask "Ship it now?" Yes → `ship` skill. No → make a save point: `git add` the changed files by name (never `-A`, never secrets), then `git commit -m "<card>: <one line>"`. Say: "Saved on this computer. It goes to GitHub at the next ship it." You do every git step; never ask the kid to.
 
 ## 4. A new game
 Use the `new-game` skill.
