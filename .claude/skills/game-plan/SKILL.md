@@ -45,7 +45,7 @@ A vague ask ("make it better")? Ask for the goal: what, why, and how the kid wil
 Every skill that changes a file uses this gate. No edit before the kid passes the quiz and says yes.
 
 1. **Teach the idea.** Explain how it will work in 2–4 plain lines. Use a game or a thing the kid knows. Not the code.
-2. **Show the plan.** Write cards: ID, Input, Output, Done when. A new ID uses the next free number for its letter in `PLAN.md` (F3 after F2). Never use an ID twice. One card = 5–30 minutes. Bigger → more cards. Give each card numbered steps. One step = one change the kid can see, about 1 minute of your work. Show **Input / Output / Steps / Test**.
+2. **Show the plan.** Write cards: ID, Input, Output, Done when. A new ID uses the next free number for its letter in `PLAN.md` (F3 after F2). Never use an ID twice. One card = 5–30 minutes. Bigger → more cards. Give each card numbered steps. One step = one change the kid can see, about 1 minute of your work. `PLAN.md` keeps the ID, Input, and Output. To the kid, show only a game-word title (no ID, no file names), the **Steps**, and the **Test**, in max 8 lines.
 3. **Quiz.** Ask 2–3 short questions, one at a time. A small change (a typo, one number) needs 1 question. Ask the kid to predict or reason, not to repeat words:
    - "What will you see change when you press F5?"
    - "Why does <part> need to happen before <part>?"
