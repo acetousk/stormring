@@ -11,6 +11,7 @@
 - Changed: the storm is a green jello spill that closes in.
 - Changed: new school look: a chalkboard start screen, index-card buttons, a report card with a gold star when you win.
 - Changed: new sounds: throw, splat, tray clink, tray clack, jello wobble, and a school bell at the start.
+- Added: the Android version. Install it with Obtainium.
 
 ## v0.2.4 — 2026-11-26
 
